@@ -23,3 +23,11 @@
 public boolean isXposedActive();
 }
 -keep public class io.github.MoWei.Frozen.hook.Hook {}
+
+# Navigation graphs instantiate Fragment destinations by class name in release builds.
+-keep public class io.github.MoWei.Frozen.fragment.** extends androidx.fragment.app.Fragment {
+    public <init>();
+}
+-keep public class io.github.MoWei.Frozen.activity.AppConfigActivity extends androidx.appcompat.app.AppCompatActivity {
+    public <init>();
+}

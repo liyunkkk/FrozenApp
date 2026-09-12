@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- LSPosed Modern Material 3 Dark Palette -->
-    <color name="md_primary">#A8C7FA</color>
-    <color name="md_on_primary">#042D6B</color>
+    <color name="md_primary">#34A853</color>
+    <color name="md_on_primary">#FFFFFFFF</color>
     <color name="md_primary_container">#004A77</color>
     <color name="md_on_primary_container">#D3E3FD</color>
 
@@ -20,7 +20,7 @@
     <color name="md_outline">#8E9199</color>
     <color name="md_outline_variant">#2E3036</color>
 
-    <color name="float_button">#A8C7FA</color>
+    <color name="float_button">#34A853</color>
     <color name="card_surface">#1E1F23</color>
     <color name="list_item_surface">#1E1F23</color>
     <color name="navigation_surface">#1E1F23</color>
@@ -46,8 +46,8 @@
     <color name="liquid_glass_dropdown_bg">#F01E2128</color>
     <color name="liquid_glass_btn_bg">#34A853</color>
     <color name="liquid_glass_btn_text">#FFFFFF</color>
-    <color name="liquid_glass_btn_secondary_bg">#30343C</color>
-    <color name="liquid_glass_btn_secondary_text">#E2E2E6</color>
+    <color name="liquid_glass_btn_secondary_bg">#34A853</color>
+    <color name="liquid_glass_btn_secondary_text">#FFFFFFFF</color>
     <color name="nav_icon_active">#81C784</color>
     <color name="nav_indicator_color">#24422A</color>
     <color name="nav_icon_normal">#9AA0A6</color>

@@ -55,8 +55,8 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="12dp"
         android:contentDescription="@string/icon"
-        app:backgroundTint="@color/md_secondary_container"
-        app:tint="@color/md_on_secondary_container"
+        app:backgroundTint="@color/liquid_glass_btn_bg"
+        app:tint="@color/liquid_glass_btn_text"
         app:layout_constraintBottom_toTopOf="@+id/fabClear"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_freezeit_24dp" />
@@ -68,8 +68,8 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/bottom_content_padding"
         android:contentDescription="@string/icon"
-        app:backgroundTint="@color/md_primary"
-        app:tint="@color/md_on_primary"
+        app:backgroundTint="@color/liquid_glass_btn_bg"
+        app:tint="@color/liquid_glass_btn_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_clear_log_24dp" />

@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,14 @@ public class AppList extends Fragment {
                 return;
             }
 
-            List<AppFreezeInfo> list = FreezeDetailScanner.scan(ctx);
+            List<AppFreezeInfo> list;
+            try {
+                list = FreezeDetailScanner.scan(ctx.getApplicationContext());
+            } catch (Throwable error) {
+                Log.e("FrozenAppList", "Failed to scan app freeze details", error);
+                list = java.util.Collections.emptyList();
+            }
+            final List<AppFreezeInfo> result = list;
 
             mainHandler.post(() -> {
                 if (binding == null || !isAdded()) {
@@ -108,10 +116,10 @@ public class AppList extends Fragment {
                 }
                 isLoading = false;
                 binding.swipeRefresh.setRefreshing(false);
-                adapter.updateData(list);
+                adapter.updateData(result);
                 updateSummary();
             });
-        }).start();
+        }, "FrozenAppListScanner").start();
     }
 
     private void updateSummary() {

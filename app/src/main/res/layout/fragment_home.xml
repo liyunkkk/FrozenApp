@@ -35,7 +35,7 @@
                 <LinearLayout
                     android:id="@+id/stateLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="82dp"
                     android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -65,7 +65,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/realtimeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="210dp"
                 android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="@dimen/card_corner_radius"
@@ -190,7 +190,7 @@
                     <ImageView
                         android:id="@+id/cpuImg"
                         android:layout_width="match_parent"
-                        android:layout_height="64dp"
+                        android:layout_height="132dp"
                         android:contentDescription="@string/icon" />
 
                     <LinearLayout
@@ -225,7 +225,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_app_config_entry"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="82dp"
                 android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -237,7 +237,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingHorizontal="12dp"
@@ -293,7 +293,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/version_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="194dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/card_surface"
@@ -313,7 +313,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingHorizontal="6dp"
-                        android:paddingVertical="2.5dp">
+                        android:paddingVertical="7dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -339,7 +339,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingHorizontal="6dp"
-                        android:paddingVertical="2.5dp">
+                        android:paddingVertical="7dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -365,7 +365,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingHorizontal="6dp"
-                        android:paddingVertical="2.5dp">
+                        android:paddingVertical="7dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -391,7 +391,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingHorizontal="6dp"
-                        android:paddingVertical="2.5dp">
+                        android:paddingVertical="7dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -417,7 +417,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingHorizontal="6dp"
-                        android:paddingVertical="2.5dp">
+                        android:paddingVertical="7dp">
 
                         <TextView
                             android:layout_width="0dp"

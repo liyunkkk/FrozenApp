@@ -7,7 +7,7 @@
     android:textAlignment="center"
     android:singleLine="true"
     android:ellipsize="end"
-    android:paddingHorizontal="2dp"
-    android:textColor="@color/md_on_surface"
+    android:paddingHorizontal="8dp"
+    android:textColor="@color/liquid_glass_btn_text"
     android:textSize="12sp"
     android:textStyle="bold" />
