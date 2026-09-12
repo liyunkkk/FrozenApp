@@ -51,4 +51,5 @@
     <color name="nav_icon_active">#81C784</color>
     <color name="nav_indicator_color">#24422A</color>
     <color name="nav_icon_normal">#9AA0A6</color>
+    <color name="border_liquid">#2EFFFFFF</color>
 </resources>

@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_config"
-        android:name="io.github.MoWei.Frozen.fragment.Config"
-        android:label="@string/title_config"
-        tools:layout="@layout/fragment_config" />
+        android:name="io.github.MoWei.Frozen.fragment.AppList"
+        android:label="@string/title_app_list"
+        tools:layout="@layout/fragment_app_list" />
 
     <fragment
         android:id="@+id/navigation_logcat"

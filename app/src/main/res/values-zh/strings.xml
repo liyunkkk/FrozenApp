@@ -164,4 +164,20 @@
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="got_it">我知道了</string>
+
+    <string name="title_app_list">应用列表</string>
+    <string name="title_activity_config">应用冻结配置</string>
+    <string name="freeze_details">冻结详情</string>
+    <string name="search_hint">搜索应用名称或包名</string>
+    <string name="config_entry_title">应用冻结配置</string>
+    <string name="config_entry_desc">管理应用冻结模式与白名单规则</string>
+    <string name="freeze_state_v2">❄️ V2冻结中</string>
+    <string name="freeze_state_running">📱 运行中</string>
+    <string name="freeze_state_idle">未运行</string>
+    <string name="stat_procs_frozen">%1个进程 %2个已冻结</string>
+    <string name="stat_mem">RSS %1  SWAP %2</string>
+
+<string name="stat_summary_format">%1$d个已冻结 · %2$d个运行中</string>
+    <string name="action_app_details">应用详情</string>
+    <string name="action_app_config">冻结配置</string>
 </resources>

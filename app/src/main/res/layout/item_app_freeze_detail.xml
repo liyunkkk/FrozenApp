@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="3dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/card_surface"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="9dp">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:contentDescription="@string/icon"
+            android:scaleType="fitCenter"
+            tools:srcCompat="@drawable/icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/md_on_surface"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="小红书" />
+
+            <TextView
+                android:id="@+id/proc_stat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/md_on_surface_variant"
+                android:textSize="11.5sp"
+                tools:text="1个进程 1个已冻结" />
+
+            <TextView
+                android:id="@+id/mem_stat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/gray_77"
+                android:textSize="10.5sp"
+                android:typeface="monospace"
+                tools:text="RSS 324MB  SWAP 25MB" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/freeze_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_badge_frozen"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="4dp"
+            android:textColor="#00C853"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:text="❄️ V2冻结中" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

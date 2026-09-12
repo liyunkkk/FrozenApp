@@ -190,4 +190,20 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="got_it">Got it</string>
+
+    <string name="title_app_list">Apps</string>
+    <string name="title_activity_config">App Freeze Config</string>
+    <string name="freeze_details">Freeze Details</string>
+    <string name="search_hint">Search name or package</string>
+    <string name="config_entry_title">App Freeze Config</string>
+    <string name="config_entry_desc">Manage freeze modes &amp; whitelist</string>
+    <string name="freeze_state_v2">❄️ V2 Frozen</string>
+    <string name="freeze_state_running">📱 Running</string>
+    <string name="freeze_state_idle">Idle</string>
+    <string name="stat_procs_frozen">%1 procs %2 frozen</string>
+    <string name="stat_mem">RSS %1  SWAP %2</string>
+
+    <string name="stat_summary_format">%1$d frozen · %2$d running</string>
+    <string name="action_app_details">App Info</string>
+    <string name="action_app_config">Freeze Config</string>
 </resources>

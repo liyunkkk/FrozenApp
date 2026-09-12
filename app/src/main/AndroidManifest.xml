@@ -52,6 +52,10 @@
             android:name=".activity.AppTime"
             android:exported="false"
             android:label="@string/title_activity_task_manager" />
+            <activity
+            android:name=".activity.AppConfigActivity"
+            android:exported="false"
+            android:label="@string/title_activity_config" />
     </application>
 
 </manifest>

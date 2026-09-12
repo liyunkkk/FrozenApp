@@ -32,6 +32,7 @@ import io.github.MoWei.Frozen.R;
 import io.github.MoWei.Frozen.StaticData;
 import io.github.MoWei.Frozen.Utils;
 import io.github.MoWei.Frozen.activity.About;
+import io.github.MoWei.Frozen.activity.AppConfigActivity;
 import io.github.MoWei.Frozen.activity.AppTime;
 import io.github.MoWei.Frozen.activity.Settings;
 import io.github.MoWei.Frozen.databinding.FragmentHomeBinding;
@@ -54,6 +55,9 @@ public class Home extends Fragment implements View.OnClickListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         binding.realtimeLayout.setOnClickListener(this);
+        binding.cardAppConfigEntry.setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), AppConfigActivity.class));
+        });
 
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
@@ -184,6 +188,7 @@ public class Home extends Fragment implements View.OnClickListener {
                     binding.realtimeLayout.setVisibility(View.GONE);
                     binding.freezeitLogo.setVisibility(View.GONE);
                     binding.versionCard.setVisibility(View.GONE);
+                    binding.cardAppConfigEntry.setVisibility(View.GONE);
 
                 }
                 break;
@@ -194,6 +199,7 @@ public class Home extends Fragment implements View.OnClickListener {
                     binding.freezeitLogo.setVisibility(View.VISIBLE);
                     binding.realtimeLayout.setVisibility(View.VISIBLE);
                     binding.versionCard.setVisibility(View.VISIBLE);
+                    binding.cardAppConfigEntry.setVisibility(View.VISIBLE);
 
                     boolean xposedState = isXposedActive();
                     binding.stateLayout.setBackgroundResource(xposedState ? R.color.normal_green : R.color.warn_orange);
