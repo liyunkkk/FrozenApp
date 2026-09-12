@@ -9,23 +9,30 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/bottom_content_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/width_margin">
+            android:paddingHorizontal="@dimen/width_margin"
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/logView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="88dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="0dp"
                 android:background="@drawable/bg_log_surface"
                 android:lineSpacingExtra="2dp"
-                android:padding="12dp"
+                android:padding="14dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/md_on_surface"
                 android:textSize="12sp"
@@ -46,12 +53,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginBottom="12dp"
         android:contentDescription="@string/icon"
         app:backgroundTint="@color/md_secondary_container"
         app:tint="@color/md_on_secondary_container"
         app:layout_constraintBottom_toTopOf="@+id/fabClear"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_freezeit_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -59,12 +66,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/bottom_content_padding"
         android:contentDescription="@string/icon"
         app:backgroundTint="@color/md_primary"
         app:tint="@color/md_on_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_clear_log_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

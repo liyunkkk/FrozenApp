@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_primary">#AFC6FF</color>
-    <color name="md_on_primary">#002D6B</color>
-    <color name="md_primary_container">#17468F</color>
-    <color name="md_on_primary_container">#D9E2FF</color>
+    <!-- LSPosed Modern Material 3 Dark Palette -->
+    <color name="md_primary">#A8C7FA</color>
+    <color name="md_on_primary">#042D6B</color>
+    <color name="md_primary_container">#004A77</color>
+    <color name="md_on_primary_container">#D3E3FD</color>
+
     <color name="md_secondary">#BAC7DB</color>
     <color name="md_on_secondary">#243140</color>
-    <color name="md_secondary_container">#3A4858</color>
-    <color name="md_on_secondary_container">#D6E4F7</color>
-    <color name="md_background">#111318</color>
-    <color name="md_surface">#111318</color>
-    <color name="md_surface_container">#1D2026</color>
-    <color name="md_surface_container_high">#282A30</color>
-    <color name="md_on_surface">#E2E2E9</color>
-    <color name="md_on_surface_variant">#C4C6CF</color>
-    <color name="md_outline">#8E9099</color>
-    <color name="md_outline_variant">#44474E</color>
-    <color name="float_button">#AFC6FF</color>
-    <color name="card_surface">#1D2026</color>
-    <color name="list_item_surface">#1A1D22</color>
-    <color name="navigation_surface">#191C21</color>
-    <color name="gray_white">#18FFFFFF</color>
+    <color name="md_secondary_container">#30343C</color>
+    <color name="md_on_secondary_container">#E2E2E6</color>
 
+    <color name="md_background">#121214</color>
+    <color name="md_surface">#121214</color>
+    <color name="md_surface_container">#1E1F23</color>
+    <color name="md_surface_container_high">#282A30</color>
+    <color name="md_on_surface">#E3E3E8</color>
+    <color name="md_on_surface_variant">#8E9199</color>
+    <color name="md_outline">#8E9199</color>
+    <color name="md_outline_variant">#2E3036</color>
+
+    <color name="float_button">#A8C7FA</color>
+    <color name="card_surface">#1E1F23</color>
+    <color name="list_item_surface">#1E1F23</color>
+    <color name="navigation_surface">#1E1F23</color>
+    <color name="chip_surface">#2A2C32</color>
+    <color name="chip_stroke">#3D414B</color>
+
+    <color name="gray_white">#18FFFFFF</color>
     <color name="cpu0">#22B8DD</color>
     <color name="cpu1">#22DDB8</color>
     <color name="cpu2">#22DD6D</color>

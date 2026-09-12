@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_background"
-    android:orientation="vertical">
+    android:background="@color/md_background">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:navGraph="@navigation/mobile_navigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/navigation_surface"
-        android:minHeight="72dp"
-        android:paddingHorizontal="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_height="@dimen/floating_nav_height"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/floating_nav_margin"
+        android:layout_marginEnd="@dimen/floating_nav_margin"
+        android:layout_marginBottom="@dimen/floating_nav_margin"
+        android:background="@drawable/bg_floating_nav_bar"
+        android:elevation="8dp"
+        android:paddingHorizontal="4dp"
+        app:elevation="8dp"
         app:itemActiveIndicatorStyle="@style/Frozen.NavigationIndicator"
         app:itemIconTint="@color/navigation_item_tint"
         app:itemTextColor="@color/navigation_item_tint"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

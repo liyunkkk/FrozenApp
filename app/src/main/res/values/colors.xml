@@ -1,51 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Material 3 inspired Frozen palette. -->
+    <!-- LSPosed Modern Material 3 Light Palette -->
     <color name="purple_200">#A8C8FF</color>
-    <color name="purple_500">#2563EB</color>
-    <color name="purple_700">#1746A2</color>
+    <color name="purple_500">#1A73E8</color>
+    <color name="purple_700">#174EA6</color>
     <color name="teal_200">#B7CCFF</color>
-    <color name="teal_700">#445E91</color>
+    <color name="teal_700">#1A73E8</color>
     <color name="black">#FF111318</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="md_primary">#2563EB</color>
+    <color name="md_primary">#1A73E8</color>
     <color name="md_on_primary">#FFFFFFFF</color>
-    <color name="md_primary_container">#D9E2FF</color>
-    <color name="md_on_primary_container">#001A41</color>
-    <color name="md_secondary">#526070</color>
+    <color name="md_primary_container">#D3E3FD</color>
+    <color name="md_on_primary_container">#041E49</color>
+
+    <color name="md_secondary">#5F6368</color>
     <color name="md_on_secondary">#FFFFFFFF</color>
-    <color name="md_secondary_container">#D6E4F7</color>
-    <color name="md_on_secondary_container">#0E1D2A</color>
-    <color name="md_background">#F8F9FF</color>
-    <color name="md_surface">#F8F9FF</color>
-    <color name="md_surface_container">#EDF0F7</color>
-    <color name="md_surface_container_high">#E4E7EE</color>
-    <color name="md_on_surface">#191C20</color>
-    <color name="md_on_surface_variant">#43474E</color>
-    <color name="md_outline">#74777F</color>
-    <color name="md_outline_variant">#C4C6CF</color>
+    <color name="md_secondary_container">#E8EAED</color>
+    <color name="md_on_secondary_container">#202124</color>
+
+    <color name="md_background">#F8F9FA</color>
+    <color name="md_surface">#F8F9FA</color>
+    <color name="md_surface_container">#F1F3F4</color>
+    <color name="md_surface_container_high">#E8EAED</color>
+    <color name="md_on_surface">#1F1F1F</color>
+    <color name="md_on_surface_variant">#5F6368</color>
+    <color name="md_outline">#DADCE0</color>
+    <color name="md_outline_variant">#E8EAED</color>
 
     <color name="gray_11">#111318</color>
     <color name="gray_33">#303238</color>
-    <color name="gray_55">#55585F</color>
-    <color name="gray_77">#74777F</color>
-    <color name="gray_99">#90939A</color>
-    <color name="gray_bb">#C4C6CF</color>
-    <color name="gray_dd">#E0E2E9</color>
-    <color name="gray_ee">#EDF0F7</color>
-
+    <color name="gray_55">#5F6368</color>
+    <color name="gray_77">#80868B</color>
+    <color name="gray_99">#BDC1C6</color>
+    <color name="gray_bb">#DADCE0</color>
+    <color name="gray_dd">#E8EAED</color>
+    <color name="gray_ee">#F1F3F4</color>
     <color name="black_11">#11000000</color>
     <color name="black_33">#33000000</color>
     <color name="black_55">#55000000</color>
     <color name="black_77">#77000000</color>
     <color name="black_99">#99000000</color>
-
-    <color name="float_button">#2563EB</color>
+    <color name="float_button">#1A73E8</color>
     <color name="transparent">#00000000</color>
-    <color name="card_surface">#F2F5FC</color>
-    <color name="list_item_surface">#F5F7FD</color>
-    <color name="navigation_surface">#F0F3FA</color>
+
+    <!-- LSPosed Card & Navigation Surface Colors -->
+    <color name="card_surface">#FFFFFFFF</color>
+    <color name="list_item_surface">#FFFFFFFF</color>
+    <color name="navigation_surface">#FFFFFFFF</color>
+    <color name="chip_surface">#F1F3F4</color>
+    <color name="chip_stroke">#DADCE0</color>
 
     <color name="trans_gray_11">#11BBBBBB</color>
     <color name="trans_gray_33">#33BBBBBB</color>
@@ -64,11 +68,10 @@
     <color name="cpu5">#C59C00</color>
     <color name="cpu6">#E66B1A</color>
     <color name="cpu7">#E61A1A</color>
-
-    <color name="blue">#CC2563EB</color>
-    <color name="warn_red">#66FF0000</color>
-    <color name="warn_orange">#66FF8800</color>
-    <color name="normal_green">#6600FF00</color>
+    <color name="blue">#CC1A73E8</color>
+    <color name="warn_red">#66EA4335</color>
+    <color name="warn_orange">#66FBBC04</color>
+    <color name="normal_green">#6634A853</color>
     <color name="gray_white">#10000000</color>
-    <color name="ic_launcher_background">#2563EB</color>
+    <color name="ic_launcher_background">#1A73E8</color>
 </resources>

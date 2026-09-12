@@ -4,13 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_background"
     tools:context=".fragment.Config">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_background">
+        android:background="@color/md_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewApp"
@@ -19,7 +24,7 @@
             android:clipToPadding="false"
             android:paddingHorizontal="@dimen/width_margin"
             android:paddingTop="8dp"
-            android:paddingBottom="96dp" />
+            android:paddingBottom="@dimen/bottom_content_padding" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -28,12 +33,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginBottom="12dp"
         android:contentDescription="@string/icon"
         app:backgroundTint="@color/md_secondary_container"
         app:tint="@color/md_on_secondary_container"
         app:layout_constraintBottom_toTopOf="@+id/fabSave"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_android_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -41,12 +46,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/bottom_content_padding"
         android:contentDescription="@string/icon"
         app:backgroundTint="@color/md_primary"
         app:tint="@color/md_on_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_save_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

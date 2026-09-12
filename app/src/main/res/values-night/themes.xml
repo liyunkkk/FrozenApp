@@ -12,15 +12,26 @@
         <item name="colorOnSurface">@color/md_on_surface</item>
         <item name="colorOnSurfaceVariant">@color/md_on_surface_variant</item>
         <item name="colorOutline">@color/md_outline</item>
+        <item name="colorOutlineVariant">@color/md_outline_variant</item>
         <item name="android:colorAccent">@color/md_primary</item>
-        <item name="android:navigationBarColor">@color/navigation_surface</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@color/md_surface</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:fontFamily">sans</item>
         <item name="actionBarStyle">@style/Frozen.ActionBar</item>
+        <item name="actionBarTheme">@style/Frozen.ActionBarTheme</item>
         <item name="bottomNavigationStyle">@style/Frozen.BottomNavigation</item>
         <item name="floatingActionButtonStyle">@style/Frozen.FloatingActionButton</item>
+        <item name="materialAlertDialogTheme">@style/Frozen.DialogTheme</item>
+        <item name="alertDialogTheme">@style/Frozen.DialogTheme</item>
+    </style>
+
+    <style name="Frozen.ActionBarTheme" parent="ThemeOverlay.Material3.ActionBar">
+        <item name="colorControlNormal">@color/md_on_surface</item>
+        <item name="actionMenuTextColor">@color/md_on_surface</item>
+        <item name="titleTextColor">@color/md_on_surface</item>
+        <item name="colorOnSurface">@color/md_on_surface</item>
     </style>
 
     <style name="Frozen.ActionBar" parent="Widget.Material3.ActionBar.Solid">
@@ -32,24 +43,38 @@
 
     <style name="Frozen.ActionBar.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textColor">@color/md_on_surface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Frozen.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/navigation_surface</item>
+        <item name="android:background">@drawable/bg_floating_nav_bar</item>
         <item name="itemActiveIndicatorStyle">@style/Frozen.NavigationIndicator</item>
         <item name="itemIconTint">@color/navigation_item_tint</item>
         <item name="itemTextColor">@color/navigation_item_tint</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">8dp</item>
+        <item name="itemRippleColor">@color/md_primary_container</item>
     </style>
 
     <style name="Frozen.NavigationIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/md_primary_container</item>
+        <item name="android:width">56dp</item>
+        <item name="android:height">32dp</item>
     </style>
 
     <style name="Frozen.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/md_primary</item>
         <item name="tint">@color/md_on_primary</item>
-        <item name="elevation">3dp</item>
+        <item name="elevation">4dp</item>
+    </style>
+
+    <style name="Frozen.DialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">@drawable/bg_dialog_surface</item>
+        <item name="shapeAppearance">@style/Frozen.DialogShape</item>
+    </style>
+
+    <style name="Frozen.DialogShape" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">@dimen/dialog_corner_radius</item>
     </style>
 
     <style name="footButton" parent="Theme.Material3.DayNight">

@@ -4,5 +4,10 @@
     <dimen name="content_spacing">12dp</dimen>
     <dimen name="card_corner_radius">20dp</dimen>
     <dimen name="item_corner_radius">16dp</dimen>
-    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="dialog_corner_radius">24dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="floating_nav_margin">16dp</dimen>
+    <dimen name="floating_nav_corner_radius">28dp</dimen>
+    <dimen name="floating_nav_height">64dp</dimen>
+    <dimen name="bottom_content_padding">92dp</dimen>
 </resources>
