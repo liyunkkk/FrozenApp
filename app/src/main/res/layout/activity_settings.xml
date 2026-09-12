@@ -320,7 +320,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="@string/BootFreeze_title"
+                android:text="@string/boot_freeze_title"
                 android:textColor="@color/md_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -336,7 +336,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/BootFreeze_title"
+                    android:text="@string/boot_freeze_title"
                     android:textColor="@color/md_on_surface"
                     android:textSize="16sp" />
 
@@ -444,7 +444,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/unFreezerTemporar_title"
+                    android:text="@string/unFreezerTemporary_title"
                     android:textColor="@color/md_on_surface"
                     android:textSize="16sp" />
 
@@ -577,7 +577,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
-                android:text="@string/set_bg_title"
+                android:text="@string/set_background"
                 android:textColor="@color/md_on_surface"
                 android:textSize="16sp" />
         </LinearLayout>
