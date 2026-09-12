@@ -15,6 +15,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -102,6 +103,21 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         freezeModeSpinner = findViewById(R.id.freeze_mode_spinner);
         reFreezeTimeoutSpinner = findViewById(R.id.refreeze_timeout_spinner);
         wakeupTimeoutSpinner = findViewById(R.id.wakeup_timeout_spinner);
+
+        ArrayAdapter<CharSequence> workModeAdapter = ArrayAdapter.createFromResource(
+                this, R.array.work_mode, R.layout.item_spinner_selected);
+        workModeAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        freezeModeSpinner.setAdapter(workModeAdapter);
+
+        ArrayAdapter<CharSequence> refreezeAdapter = ArrayAdapter.createFromResource(
+                this, R.array.refreeze_timeout, R.layout.item_spinner_selected);
+        refreezeAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        reFreezeTimeoutSpinner.setAdapter(refreezeAdapter);
+
+        ArrayAdapter<CharSequence> wakeupAdapter = ArrayAdapter.createFromResource(
+                this, R.array.wakeup_timeout, R.layout.item_spinner_selected);
+        wakeupAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        wakeupTimeoutSpinner.setAdapter(wakeupAdapter);
 
         freezeTimeoutValueText = findViewById(R.id.freeze_timeout_value_text);
         terminateTimeoutValueText = findViewById(R.id.terminate_timeout_value_text);

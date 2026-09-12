@@ -36,4 +36,16 @@
     <color name="cpu5">#E6BD1A</color>
     <color name="cpu6">#E66B1A</color>
     <color name="cpu7">#FF3434</color>
+    <!-- Liquid Glass Palette (Dark) -->
+    <color name="liquid_glass_bg">#E01A1C22</color>
+    <color name="liquid_glass_card_bg">#EA1E2128</color>
+    <color name="liquid_glass_stroke">#38FFFFFF</color>
+    <color name="liquid_glass_stroke_secondary">#2E323A</color>
+    <color name="liquid_glass_pill_bg">#D8282C34</color>
+    <color name="liquid_glass_pill_stroke">#2BFFFFFF</color>
+    <color name="liquid_glass_dropdown_bg">#F01E2128</color>
+    <color name="liquid_glass_btn_bg">#A8C7FA</color>
+    <color name="liquid_glass_btn_text">#042D6B</color>
+    <color name="liquid_glass_btn_secondary_bg">#30343C</color>
+    <color name="liquid_glass_btn_secondary_text">#E2E2E6</color>
 </resources>

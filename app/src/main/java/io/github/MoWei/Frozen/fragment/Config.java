@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -394,6 +395,16 @@ public class Config extends Fragment {
                 app_label = view.findViewById(R.id.app_label);
                 spinner_cfg = view.findViewById(R.id.spinner_cfg);
                 spinner_permissive = view.findViewById(R.id.spinner_level);
+
+                ArrayAdapter<CharSequence> levelAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(), R.array.level, R.layout.item_spinner_selected);
+                levelAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinner_permissive.setAdapter(levelAdapter);
+
+                ArrayAdapter<CharSequence> cfgAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(), R.array.freeze_mode, R.layout.item_spinner_selected);
+                cfgAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinner_cfg.setAdapter(cfgAdapter);
 
                 spinner_cfg.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override

@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/icon"
-        android:padding="4dp" />
+        android:padding="2dp" />
 
     <TextView
         android:id="@+id/app_label"
@@ -33,24 +33,26 @@
 
     <Spinner
         android:id="@+id/spinner_level"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/bg_spinner_pill"
-        android:entries="@array/level"
         android:gravity="center"
-        android:popupBackground="@drawable/bg_dialog_surface"
+        android:dropDownWidth="80dp"
+        android:dropDownVerticalOffset="6dp"
+        android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
         android:spinnerMode="dropdown" />
 
     <Spinner
         android:id="@+id/spinner_cfg"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_width="128dp"
+        android:layout_height="34dp"
         android:layout_marginStart="6dp"
         android:background="@drawable/bg_spinner_pill"
-        android:entries="@array/freeze_mode"
         android:gravity="center"
-        android:popupBackground="@drawable/bg_dialog_surface"
+        android:dropDownWidth="128dp"
+        android:dropDownVerticalOffset="6dp"
+        android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
         android:spinnerMode="dropdown" />
 
 </LinearLayout>

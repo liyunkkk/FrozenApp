@@ -54,8 +54,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_spinner_pill"
-                    android:entries="@array/work_mode"
-                    android:popupBackground="@drawable/bg_dialog_surface"
+                    android:dropDownWidth="140dp"
+                    android:dropDownVerticalOffset="6dp"
+                    android:gravity="center"
+                    android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
 
@@ -85,8 +87,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_spinner_pill"
-                    android:entries="@array/refreeze_timeout"
-                    android:popupBackground="@drawable/bg_dialog_surface"
+                    android:dropDownWidth="120dp"
+                    android:dropDownVerticalOffset="6dp"
+                    android:gravity="center"
+                    android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
 
@@ -116,8 +120,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_spinner_pill"
-                    android:entries="@array/wakeup_timeout"
-                    android:popupBackground="@drawable/bg_dialog_surface"
+                    android:dropDownWidth="120dp"
+                    android:dropDownVerticalOffset="6dp"
+                    android:gravity="center"
+                    android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
         </LinearLayout>

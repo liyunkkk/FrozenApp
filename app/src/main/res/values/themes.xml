@@ -52,14 +52,16 @@
         <item name="itemActiveIndicatorStyle">@style/Frozen.NavigationIndicator</item>
         <item name="itemIconTint">@color/navigation_item_tint</item>
         <item name="itemTextColor">@color/navigation_item_tint</item>
-        <item name="elevation">8dp</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="elevation">10dp</item>
         <item name="itemRippleColor">@color/md_primary_container</item>
     </style>
 
     <style name="Frozen.NavigationIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/md_primary_container</item>
-        <item name="android:width">56dp</item>
-        <item name="android:height">32dp</item>
+        <item name="android:width">60dp</item>
+        <item name="android:height">36dp</item>
     </style>
 
     <style name="Frozen.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
@@ -69,7 +71,7 @@
     </style>
 
     <style name="Frozen.DialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">@drawable/bg_dialog_surface</item>
+        <item name="android:background">@drawable/bg_liquid_glass_dialog</item>
         <item name="shapeAppearance">@style/Frozen.DialogShape</item>
     </style>
 

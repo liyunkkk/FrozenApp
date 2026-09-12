@@ -29,6 +29,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: FrozenApp-8.1.1-ui-beta1
+          name: FrozenApp-8.1.1-ui-beta3
           path: app/build/outputs/apk/release/Frozen.apk
           if-no-files-found: error

@@ -147,12 +147,49 @@ public class Utils {
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
+        android.view.View btnClose = dialog.findViewById(R.id.dialog_btn_close);
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dialog.dismiss());
+        }
         dialog.show();
     }
 
     public static void textDialog(Context context, int titleResID, int contentResID) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(titleResID).setMessage(contentResID).create().show();
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_liquid_glass_text);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
+        android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
+        android.widget.Button btnConfirm = dialog.findViewById(R.id.dialog_btn_confirm);
+
+        if (tvTitle != null) tvTitle.setText(titleResID);
+        if (tvMsg != null) tvMsg.setText(contentResID);
+        if (btnConfirm != null) {
+            btnConfirm.setText(R.string.got_it);
+            btnConfirm.setOnClickListener(v -> dialog.dismiss());
+        }
+        dialog.show();
+    }
+
+    public static void textDialog(Context context, CharSequence title, CharSequence content) {
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_liquid_glass_text);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
+        android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
+        android.widget.Button btnConfirm = dialog.findViewById(R.id.dialog_btn_confirm);
+
+        if (tvTitle != null) tvTitle.setText(title);
+        if (tvMsg != null) tvMsg.setText(content);
+        if (btnConfirm != null) {
+            btnConfirm.setText(R.string.got_it);
+            btnConfirm.setOnClickListener(v -> dialog.dismiss());
+        }
+        dialog.show();
     }
 
     public static Bitmap resize(Bitmap bitmap, float scale) {

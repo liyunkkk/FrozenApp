@@ -23,13 +23,15 @@
         android:layout_marginEnd="@dimen/floating_nav_margin"
         android:layout_marginBottom="@dimen/floating_nav_margin"
         android:background="@drawable/bg_floating_nav_bar"
-        android:elevation="8dp"
-        android:paddingHorizontal="4dp"
-        app:elevation="8dp"
+        android:elevation="10dp"
+        android:paddingHorizontal="8dp"
+        app:elevation="10dp"
         app:itemActiveIndicatorStyle="@style/Frozen.NavigationIndicator"
+        app:itemIconSize="24dp"
         app:itemIconTint="@color/navigation_item_tint"
         app:itemTextColor="@color/navigation_item_tint"
-        app:labelVisibilityMode="labeled"
+        app:itemPaddingBottom="0dp"
+        app:itemPaddingTop="0dp"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_nav_menu" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

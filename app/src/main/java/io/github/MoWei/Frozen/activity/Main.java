@@ -58,17 +58,42 @@ public class Main extends AppCompatActivity {
         var isAccept = sf.getBoolean(key, false);
         if (isAccept) return;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.privacy_title).setMessage(R.string.privacy_content)
-                .setNegativeButton(R.string.reject, (dialog, which) -> System.exit(0))
-                .setPositiveButton(R.string.accept, (dialog, which) -> {
-                    var edit = sf.edit();
-                    edit.putBoolean(key, true);
-                    edit.apply();
-                })
-                .setCancelable(false)
-                .create()
-                .show();
+        android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.setContentView(R.layout.dialog_liquid_glass_text);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        dialog.setCancelable(false);
+
+        android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
+        android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
+        android.widget.Button btnConfirm = dialog.findViewById(R.id.dialog_btn_confirm);
+        android.widget.Button btnCancel = dialog.findViewById(R.id.dialog_btn_cancel);
+
+        if (tvTitle != null) tvTitle.setText(R.string.privacy_title);
+        if (tvMsg != null) tvMsg.setText(R.string.privacy_content);
+
+        if (btnCancel != null) {
+            btnCancel.setVisibility(android.view.View.VISIBLE);
+            btnCancel.setText(R.string.reject);
+            btnCancel.setOnClickListener(v -> System.exit(0));
+        }
+
+        if (btnConfirm != null) {
+            android.widget.LinearLayout.LayoutParams lp = (android.widget.LinearLayout.LayoutParams) btnConfirm.getLayoutParams();
+            lp.width = 0;
+            lp.weight = 1;
+            btnConfirm.setLayoutParams(lp);
+            btnConfirm.setText(R.string.accept);
+            btnConfirm.setOnClickListener(v -> {
+                var edit = sf.edit();
+                edit.putBoolean(key, true);
+                edit.apply();
+                dialog.dismiss();
+            });
+        }
+
+        dialog.show();
     }
 
 }
