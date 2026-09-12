@@ -136,6 +136,12 @@ public class Utils {
         dialog.setContentView(R.layout.img_dialog);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
+            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
         }
         ((ImageView) dialog.findViewById(R.id.img)).setImageResource(drawableID);
         dialog.show();
@@ -146,6 +152,12 @@ public class Utils {
         dialog.setContentView(layoutId);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
+            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
         }
         android.view.View btnClose = dialog.findViewById(R.id.dialog_btn_close);
         if (btnClose != null) {
@@ -159,6 +171,12 @@ public class Utils {
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
+            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
         }
         android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
         android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
@@ -178,6 +196,12 @@ public class Utils {
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
+            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
         }
         android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
         android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);

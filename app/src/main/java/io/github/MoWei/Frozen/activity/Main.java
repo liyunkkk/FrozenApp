@@ -62,6 +62,12 @@ public class Main extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
+            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(lp);
         }
         dialog.setCancelable(false);
 

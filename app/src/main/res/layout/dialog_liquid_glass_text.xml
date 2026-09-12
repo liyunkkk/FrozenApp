@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="320dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_liquid_glass_dialog"
     android:orientation="vertical"
@@ -24,12 +24,13 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ScrollView
+    <io.github.MoWei.Frozen.widget.MaxHeightScrollView
+        android:id="@+id/dialog_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="20dp"
-        android:maxHeight="320dp">
+        android:layout_marginBottom="18dp"
+        android:scrollbars="vertical">
 
         <TextView
             android:id="@+id/dialog_message"
@@ -38,7 +39,7 @@
             android:lineSpacingExtra="4dp"
             android:textColor="@color/md_on_surface_variant"
             android:textSize="14sp" />
-    </ScrollView>
+    </io.github.MoWei.Frozen.widget.MaxHeightScrollView>
 
     <LinearLayout
         android:id="@+id/dialog_button_container"
@@ -51,7 +52,7 @@
             android:id="@+id/dialog_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="42dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_liquid_glass_btn_secondary"
             android:text="@string/cancel"
