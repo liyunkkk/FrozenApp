@@ -60,15 +60,7 @@ public class Main extends AppCompatActivity {
 
         android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
-            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
-        }
+        Utils.setupCenteredDialogWindow(dialog, context);
         dialog.setCancelable(false);
 
         android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);

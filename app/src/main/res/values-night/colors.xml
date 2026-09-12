@@ -44,8 +44,11 @@
     <color name="liquid_glass_pill_bg">#D8282C34</color>
     <color name="liquid_glass_pill_stroke">#2BFFFFFF</color>
     <color name="liquid_glass_dropdown_bg">#F01E2128</color>
-    <color name="liquid_glass_btn_bg">#A8C7FA</color>
-    <color name="liquid_glass_btn_text">#042D6B</color>
+    <color name="liquid_glass_btn_bg">#34A853</color>
+    <color name="liquid_glass_btn_text">#FFFFFF</color>
     <color name="liquid_glass_btn_secondary_bg">#30343C</color>
     <color name="liquid_glass_btn_secondary_text">#E2E2E6</color>
+    <color name="nav_icon_active">#81C784</color>
+    <color name="nav_indicator_color">#24422A</color>
+    <color name="nav_icon_normal">#9AA0A6</color>
 </resources>

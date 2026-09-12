@@ -85,7 +85,7 @@
                         android:layout_height="40dp"
                         android:contentDescription="@string/icon"
                         android:padding="2dp"
-                        app:srcCompat="@drawable/logo_coolapk" />
+                        app:srcCompat="@drawable/logo_github" />
 
                     <TextView
                         android:layout_width="0dp"

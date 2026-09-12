@@ -6,8 +6,8 @@
     <string name="coolapk_link" translatable="false">http://www.coolapk.com/u/24268987</string>
     <string name="qq_group_link" translatable="false">https://jq.qq.com/?_wv=1027&amp;k=ZsyKpCP8</string>
     <string name="qq_channel_link" translatable="false">https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;appChannel=share&amp;inviteCode=1W6opB7&amp;appChannel=share&amp;businessType=9&amp;from=246610&amp;biz=ka</string>
-    <string name="github_link" translatable="false">https://github.com/jark006</string>
-    <string name="github_project_link" translatable="false">https://github.com/jark006/freezeitVS</string>
+    <string name="github_link" translatable="false">https://github.com/liyunkkk/FrozenApp</string>
+    <string name="github_project_link" translatable="false">https://github.com/liyunkkk/FrozenApp/freezeitVS</string>
 
 
     <string name="privacy_content" translatable="false">
@@ -46,7 +46,7 @@
     <string name="title_config">Config</string>
     <string name="title_logcat">Log</string>
     <string name="icon">Icon</string>
-    <string name="coolapk_text">Coolapk @MoWei</string>
+    <string name="coolapk_text">GitHub @liyunkkk (情绪动物)</string>
     <string name="qq_group_text">QQ Group 697991010</string>
     <string name="qq_channel_text">QQ Channel [Frozen模块]</string>
     <string name="update_app_label">Update Apps</string>
@@ -111,7 +111,7 @@
         Disconnect the network of frozen apps to save battery
     </string>
 
-    <string name="developer">Developer MoWei Original Developer: JARK006</string>
+    <string name="developer">Developer 情绪动物 (@liyunkkk)</string>
     <string name="physical_ram_text">[RAM] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="virtual_ram_text">[SWAP] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="ext_memory">ExtMemory: %1$.2f GiB</string>

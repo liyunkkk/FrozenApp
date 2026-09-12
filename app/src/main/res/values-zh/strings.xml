@@ -10,13 +10,13 @@
     <string name="xposed_description">第三方安卓墓碑, 实现堪比IOS类似的完美墓碑机制</string>
 
 
-    <string name="coolapk_text">酷安 @MoWei 原作者:JARK006</string>
+    <string name="coolapk_text">GitHub @liyunkkk (情绪动物)</string>
     <string name="qq_group_text">QQ群组 697991010</string>
     <string name="qq_channel_text">QQ频道 Frozen模块</string>
 
     <string name="update_app_label">更新应用名称</string>
     <string name="about">关于</string>
-    <string name="developer">开发者 MoWei</string>
+    <string name="developer">开发者 情绪动物 (@liyunkkk)</string>
     <string name="xposed_warn">未激活,无法工作</string>
     <string name="freezeit_offline">Frozen未启用或工作异常</string>
     <string name="freezeit_error_tips">

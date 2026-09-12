@@ -131,18 +131,26 @@ public class Utils {
         }
     }
 
-    public static void imgDialog(Context context, @DrawableRes int drawableID) {
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.img_dialog);
+    public static void setupCenteredDialogWindow(Dialog dialog, Context context) {
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setGravity(android.view.Gravity.CENTER);
             android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
             lp.copyFrom(dialog.getWindow().getAttributes());
             android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            lp.gravity = android.view.Gravity.CENTER;
+            lp.x = 0;
+            lp.y = 0;
             lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
             lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
             dialog.getWindow().setAttributes(lp);
         }
+    }
+
+    public static void imgDialog(Context context, @DrawableRes int drawableID) {
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.img_dialog);
+        setupCenteredDialogWindow(dialog, context);
         ((ImageView) dialog.findViewById(R.id.img)).setImageResource(drawableID);
         dialog.show();
     }
@@ -150,15 +158,7 @@ public class Utils {
     public static void layoutDialog(Context context, @LayoutRes int layoutId) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(layoutId);
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
-            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
-        }
+        setupCenteredDialogWindow(dialog, context);
         android.view.View btnClose = dialog.findViewById(R.id.dialog_btn_close);
         if (btnClose != null) {
             btnClose.setOnClickListener(v -> dialog.dismiss());
@@ -169,15 +169,7 @@ public class Utils {
     public static void textDialog(Context context, int titleResID, int contentResID) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
-            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
-        }
+        setupCenteredDialogWindow(dialog, context);
         android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
         android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
         android.widget.Button btnConfirm = dialog.findViewById(R.id.dialog_btn_confirm);
@@ -194,15 +186,7 @@ public class Utils {
     public static void textDialog(Context context, CharSequence title, CharSequence content) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_liquid_glass_text);
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            android.util.DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            lp.width = (int) Math.min(dm.widthPixels * 0.90f, 360 * dm.density);
-            lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
-        }
+        setupCenteredDialogWindow(dialog, context);
         android.widget.TextView tvTitle = dialog.findViewById(R.id.dialog_title);
         android.widget.TextView tvMsg = dialog.findViewById(R.id.dialog_message);
         android.widget.Button btnConfirm = dialog.findViewById(R.id.dialog_btn_confirm);

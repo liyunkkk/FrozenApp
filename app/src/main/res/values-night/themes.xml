@@ -57,7 +57,7 @@
     </style>
 
     <style name="Frozen.NavigationIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/md_primary_container</item>
+        <item name="android:color">@color/nav_indicator_color</item>
         <item name="android:width">56dp</item>
         <item name="android:height">32dp</item>
     </style>

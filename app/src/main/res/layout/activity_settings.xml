@@ -20,15 +20,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_spacing"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_log_surface"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/freeze_mode_title"
                 android:textColor="@color/md_primary"
                 android:textSize="13sp"
@@ -36,7 +37,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="60dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -52,7 +53,7 @@
                 <Spinner
                     android:id="@+id/freeze_mode_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/bg_spinner_pill"
                     android:dropDownWidth="140dp"
                     android:dropDownVerticalOffset="6dp"
@@ -64,12 +65,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="60dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -85,7 +86,7 @@
                 <Spinner
                     android:id="@+id/refreeze_timeout_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/bg_spinner_pill"
                     android:dropDownWidth="120dp"
                     android:dropDownVerticalOffset="6dp"
@@ -97,12 +98,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="60dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -118,7 +119,7 @@
                 <Spinner
                     android:id="@+id/wakeup_timeout_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/bg_spinner_pill"
                     android:dropDownWidth="120dp"
                     android:dropDownVerticalOffset="6dp"
@@ -132,15 +133,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_spacing"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_log_surface"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/freeze_timeout_title"
                 android:textColor="@color/md_primary"
                 android:textSize="13sp"
@@ -223,15 +225,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_spacing"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_log_surface"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/battery_title"
                 android:textColor="@color/md_primary"
                 android:textSize="13sp"
@@ -239,7 +242,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -261,12 +264,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -288,12 +291,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -317,15 +320,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_spacing"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_log_surface"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/boot_freeze_title"
                 android:textColor="@color/md_primary"
                 android:textSize="13sp"
@@ -333,7 +337,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -355,12 +359,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -382,12 +386,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -409,12 +413,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -436,12 +440,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -463,12 +467,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -490,12 +494,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -517,12 +521,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -544,12 +548,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/md_outline_variant" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -573,15 +577,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_spacing"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_log_surface"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="18dp">
 
             <TextView
                 android:id="@+id/set_bg"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:gravity="center_vertical"
                 android:text="@string/set_background"
                 android:textColor="@color/md_on_surface"
