@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="md_primary">#AFC6FF</color>
+    <color name="md_on_primary">#002D6B</color>
+    <color name="md_primary_container">#17468F</color>
+    <color name="md_on_primary_container">#D9E2FF</color>
+    <color name="md_secondary">#BAC7DB</color>
+    <color name="md_on_secondary">#243140</color>
+    <color name="md_secondary_container">#3A4858</color>
+    <color name="md_on_secondary_container">#D6E4F7</color>
+    <color name="md_background">#111318</color>
+    <color name="md_surface">#111318</color>
+    <color name="md_surface_container">#1D2026</color>
+    <color name="md_surface_container_high">#282A30</color>
+    <color name="md_on_surface">#E2E2E9</color>
+    <color name="md_on_surface_variant">#C4C6CF</color>
+    <color name="md_outline">#8E9099</color>
+    <color name="md_outline_variant">#44474E</color>
+    <color name="float_button">#AFC6FF</color>
+    <color name="card_surface">#1D2026</color>
+    <color name="list_item_surface">#1A1D22</color>
+    <color name="navigation_surface">#191C21</color>
+    <color name="gray_white">#18FFFFFF</color>
 
-    <color name="cpu0">#22b8dd</color>
-    <color name="cpu1">#22ddb8</color>
-    <color name="cpu2">#22dd6d</color>
-    <color name="cpu3">#92dd22</color>
-    <color name="cpu4">#e6e61a</color>
-    <color name="cpu5">#e6bd1a</color>
-    <color name="cpu6">#e66b1a</color>
+    <color name="cpu0">#22B8DD</color>
+    <color name="cpu1">#22DDB8</color>
+    <color name="cpu2">#22DD6D</color>
+    <color name="cpu3">#92DD22</color>
+    <color name="cpu4">#E6E61A</color>
+    <color name="cpu5">#E6BD1A</color>
+    <color name="cpu6">#E66B1A</color>
     <color name="cpu7">#FF3434</color>
-
 </resources>

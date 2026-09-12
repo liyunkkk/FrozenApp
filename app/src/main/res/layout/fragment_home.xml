@@ -5,6 +5,7 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_background"
     tools:context=".fragment.Home">
 
     <ScrollView
@@ -21,15 +22,17 @@
             <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                android:alpha="0.75"
-                card_view:cardUseCompatPadding="true">
+                android:layout_marginBottom="@dimen/content_spacing"
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardUseCompatPadding="false">
 
                 <LinearLayout
                     android:id="@+id/stateLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_white"
+                    android:background="@color/transparent"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -60,14 +63,16 @@
                 android:id="@+id/realtimeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.75"
-                app:cardCornerRadius="16dp"
-                app:cardUseCompatPadding="true">
+                android:layout_marginBottom="@dimen/content_spacing"
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardUseCompatPadding="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_white"
+                    android:background="@color/transparent"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -220,15 +225,17 @@
                 android:id="@+id/version_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                android:alpha="0.75"
+                android:layout_marginBottom="@dimen/content_spacing"
                 android:visibility="invisible"
-                card_view:cardUseCompatPadding="true">
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                card_view:cardUseCompatPadding="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/gray_white"
+                    android:background="@color/transparent"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -354,15 +361,17 @@
                 android:id="@+id/changelog_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/content_spacing"
                 android:visibility="gone"
-                android:alpha="0.75"
-                app:cardCornerRadius="16dp"
-                card_view:cardUseCompatPadding="true">
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                card_view:cardUseCompatPadding="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/gray_white"
+                    android:background="@color/transparent"
                     android:orientation="vertical"
                     android:padding="10dp">
 
