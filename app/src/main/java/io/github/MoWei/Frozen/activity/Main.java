@@ -17,6 +17,7 @@ import io.github.MoWei.Frozen.AppInfoCache;
 import io.github.MoWei.Frozen.BuildConfig;
 import io.github.MoWei.Frozen.R;
 import io.github.MoWei.Frozen.StaticData;
+import io.github.MoWei.Frozen.Utils;
 import io.github.MoWei.Frozen.databinding.ActivityMainBinding;
 
 public class Main extends AppCompatActivity {
