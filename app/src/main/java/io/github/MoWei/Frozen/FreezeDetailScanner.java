@@ -162,7 +162,7 @@ public class FreezeDetailScanner {
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
 
-            String cmd = "toybox ps -A -o UID,PID,RSS,NAME,WCHAN | awk 'BEGIN {while((getline f<"/sys/fs/cgroup/frozen/cgroup.procs")>0) fr[f]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (fr[$2] || index($5,"do_freezer")>0) fc[u]++; while((getline s<("/proc/"$2"/status"))>0) {if (s ~ /^VmSwap:/) {split(s, a); sw[u]+=a[2]; break}}; close("/proc/"$2"/status")} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024), int(sw[u]/1024)}'\n" +
+            String cmd = "toybox ps -A -o UID,PID,RSS,NAME,WCHAN | awk 'BEGIN {while((getline f<\"/sys/fs/cgroup/frozen/cgroup.procs\")>0) fr[f]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (fr[$2] || index($5,\"do_freezer\")>0) fc[u]++; while((getline s<(\"/proc/\"$2\"/status\"))>0) {if (s ~ /^VmSwap:/) {split(s, a); sw[u]+=a[2]; break}}; close(\"/proc/\"$2\"/status\")} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024), int(sw[u]/1024)}'\n" +
                     "exit\n";
             os.write(cmd.getBytes(StandardCharsets.UTF_8));
             os.flush();
@@ -171,7 +171,7 @@ public class FreezeDetailScanner {
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                String[] parts = line.split("\s+");
+                String[] parts = line.split("\\s+");
                 if (parts.length >= 5) {
                     try {
                         int uid = Integer.parseInt(parts[0]);
@@ -215,7 +215,7 @@ public class FreezeDetailScanner {
                     continue;
                 }
 
-                String[] p = l.split("\s+");
+                String[] p = l.split("\\s+");
                 if (p.length < 3) continue;
 
                 boolean isFrozen = l.contains("冻结");
