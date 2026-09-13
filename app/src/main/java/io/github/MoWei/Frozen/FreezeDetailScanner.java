@@ -10,8 +10,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.github.MoWei.Frozen.model.AppFreezeInfo;
@@ -20,6 +22,7 @@ public class FreezeDetailScanner {
     private static final String TAG = "FreezeScanner";
     private static long sLastScanTime = 0;
     private static List<AppFreezeInfo> sCachedResult = null;
+    private static final Map<Integer, String> sFakeUidNames = new HashMap<>();
 
     public static class StatItem {
         public int uid;
@@ -105,11 +108,12 @@ public class FreezeDetailScanner {
                             info.isSystemApp
                     ));
                 } else {
-                    String label = String.valueOf(item.uid);
+                    String fallbackLabel = sFakeUidNames.containsKey(item.uid) ?
+                            sFakeUidNames.get(item.uid) : ("UID " + item.uid);
                     result.add(new AppFreezeInfo(
                             item.uid,
-                            "uid." + item.uid,
-                            label,
+                            "proc." + item.uid,
+                            fallbackLabel,
                             null,
                             item.procCount,
                             item.frozenCount,
@@ -184,7 +188,7 @@ public class FreezeDetailScanner {
 
                 boolean isFrozen = l.contains("冻结");
 
-                // 标准格式: PID(0) RSS(1) SWAP(2) UID(3) 状态(4) 进程名(5...)
+                // 1. 标准新格式: PID(0) RSS(1) SWAP(2) UID(3) 状态(4) 进程名(5...)
                 if (p.length >= 5 && isInteger(p[0]) && isInteger(p[1]) && isInteger(p[2]) && isInteger(p[3])) {
                     try {
                         int rss = Integer.parseInt(p[1]);
@@ -204,20 +208,38 @@ public class FreezeDetailScanner {
                     } catch (Exception ignored) {}
                 }
 
-                // 兼容旧格式: PID(0) RSS(1) 状态(2) 进程名(3)
-                if (isInteger(p[0]) && isInteger(p[1])) {
+                // 2. 当前守护进程真实格式: PID(0) RSS(1) 状态(2) 应用名(3...)
+                if (p.length >= 4 && isInteger(p[0]) && isInteger(p[1])) {
                     try {
-                        int mib = Integer.parseInt(p[1]);
-                        String appName = p[p.length - 1];
+                        int rss = Integer.parseInt(p[1]);
+                        StringBuilder nameBuilder = new StringBuilder();
+                        for (int k = 3; k < p.length; k++) {
+                            if (nameBuilder.length() > 0) nameBuilder.append(" ");
+                            nameBuilder.append(p[k]);
+                        }
+                        String appName = nameBuilder.toString();
+
                         int targetUid = findUidByAppName(appName);
                         if (targetUid != -1) {
                             StatItem existing = map.get(targetUid);
                             if (existing != null) {
                                 existing.procCount++;
                                 if (isFrozen) existing.frozenCount++;
-                                existing.rssMb += mib;
+                                existing.rssMb += rss;
                             } else {
-                                map.put(targetUid, new StatItem(targetUid, 1, isFrozen ? 1 : 0, mib, 0));
+                                map.put(targetUid, new StatItem(targetUid, 1, isFrozen ? 1 : 0, rss, 0));
+                            }
+                        } else {
+                            // 若系统未查到 UID，生成伪 UID 兜底，绝不丢弃任何被冻结应用
+                            int fakeUid = 90000 + Math.abs(appName.hashCode() % 9000);
+                            sFakeUidNames.put(fakeUid, appName);
+                            StatItem existing = map.get(fakeUid);
+                            if (existing != null) {
+                                existing.procCount++;
+                                if (isFrozen) existing.frozenCount++;
+                                existing.rssMb += rss;
+                            } else {
+                                map.put(fakeUid, new StatItem(fakeUid, 1, isFrozen ? 1 : 0, rss, 0));
                             }
                         }
                     } catch (Exception ignored) {}
@@ -311,19 +333,42 @@ public class FreezeDetailScanner {
         return true;
     }
 
-    private static int findUidByAppName(String appName) {
-        if (appName == null || appName.isEmpty()) return -1;
-        int colonIdx = appName.indexOf(':');
-        String baseName = colonIdx != -1 ? appName.substring(0, colonIdx) : appName;
+    private static int findUidByAppName(String rawName) {
+        if (rawName == null || rawName.trim().isEmpty()) return -1;
+        String appName = rawName.trim();
+        int colon = appName.indexOf(':');
+        String baseName = colon != -1 ? appName.substring(0, colon).trim() : appName;
 
         List<Integer> uids = AppInfoCache.getUidList();
+
+        // 1. 精确匹配应用标签 (label)
+        for (int uid : uids) {
+            AppInfoCache.Info info = AppInfoCache.get(uid);
+            if (info != null && (info.label.equalsIgnoreCase(appName) || info.label.equalsIgnoreCase(baseName))) {
+                return uid;
+            }
+        }
+
+        // 2. 忽略空格/大小写匹配 (例如 "Scene Cracked" 匹配 "Scene")
+        String noSpaceBase = baseName.replace(" ", "").toLowerCase();
         for (int uid : uids) {
             AppInfoCache.Info info = AppInfoCache.get(uid);
             if (info != null) {
-                if (info.label.equalsIgnoreCase(appName) || info.label.equalsIgnoreCase(baseName)) {
+                String infoLabelNoSpace = info.label.replace(" ", "").toLowerCase();
+                if (infoLabelNoSpace.equals(noSpaceBase) ||
+                        noSpaceBase.contains(infoLabelNoSpace) ||
+                        infoLabelNoSpace.contains(noSpaceBase)) {
                     return uid;
                 }
-                if (info.packName.equalsIgnoreCase(appName) || info.packName.equalsIgnoreCase(baseName)) {
+            }
+        }
+
+        // 3. 匹配包名 (package name)
+        for (int uid : uids) {
+            AppInfoCache.Info info = AppInfoCache.get(uid);
+            if (info != null) {
+                String pkg = info.packName.toLowerCase();
+                if (pkg.contains(noSpaceBase) || noSpaceBase.contains(pkg)) {
                     return uid;
                 }
             }
