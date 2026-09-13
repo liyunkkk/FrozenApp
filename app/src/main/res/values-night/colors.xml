@@ -49,7 +49,7 @@
     <color name="liquid_glass_btn_secondary_bg">#34A853</color>
     <color name="liquid_glass_btn_secondary_text">#FFFFFFFF</color>
     <color name="nav_icon_active">#81C784</color>
-    <color name="nav_indicator_color">#24422A</color>
+    <color name="nav_indicator_color">#24FFFFFF</color>
     <color name="nav_icon_normal">#9AA0A6</color>
     <color name="border_liquid">#2EFFFFFF</color>
 </resources>

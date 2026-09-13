@@ -87,7 +87,7 @@
     <color name="liquid_glass_btn_secondary_bg">#34A853</color>
     <color name="liquid_glass_btn_secondary_text">#FFFFFFFF</color>
     <color name="nav_icon_active">#1E8E3E</color>
-    <color name="nav_indicator_color">#D5F3DB</color>
+    <color name="nav_indicator_color">#18000000</color>
     <color name="nav_icon_normal">#70757A</color>
     <color name="border_liquid">#1A000000</color>
 </resources>

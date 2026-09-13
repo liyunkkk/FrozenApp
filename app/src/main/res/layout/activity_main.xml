@@ -25,6 +25,7 @@
         android:background="@drawable/bg_floating_nav_bar"
         android:elevation="10dp"
         android:paddingHorizontal="8dp"
+        app:backgroundTint="@null"
         app:elevation="10dp"
         app:itemActiveIndicatorStyle="@style/Frozen.NavigationIndicator"
         app:itemIconSize="24dp"

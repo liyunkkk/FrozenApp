@@ -65,7 +65,8 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/realtimeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
+                android:layout_height="wrap_content"
+                android:minHeight="224dp"
                 android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="@dimen/card_corner_radius"

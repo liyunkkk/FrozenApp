@@ -24,8 +24,8 @@ android {
         applicationId "io.github.MoWei.Frozen"
         minSdk 29
         targetSdk 34
-        versionCode 801107
-        versionName "8.1.1-ui-beta7"
+        versionCode 801108
+        versionName "8.1.1-ui-beta8"
 
         resValue "string", "versionName", "${versionName}"
         signingConfig signingConfigs.release

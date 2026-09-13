@@ -108,6 +108,13 @@ public class Home extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroyView() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        StaticData.imgWidth = 0;
+        StaticData.imgHeight = 0;
+        StaticData.bitmap = null;
         super.onDestroyView();
         binding = null;
     }

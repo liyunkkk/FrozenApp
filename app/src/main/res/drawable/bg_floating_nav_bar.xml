@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 1. 液态玻璃微透高润基底 -->
+    <!-- Fully transparent glass body: no brand or surface tint. -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#EEFCFFFC" />
+            <solid android:color="#00000000" />
             <corners android:radius="32dp" />
         </shape>
     </item>
-    <!-- 2. 穹顶水滴高光与通透折射微渐变 (上沿反光，下部极透) -->
+    <!-- Neutral reflected light only; the page remains visible through the bar. -->
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:angle="270"
-                android:startColor="#CCFFFFFF"
-                android:centerColor="#30FFFFFF"
-                android:endColor="#1A34A853"
+                android:startColor="#42FFFFFF"
+                android:centerColor="#12FFFFFF"
+                android:endColor="#04FFFFFF"
                 android:type="linear" />
             <corners android:radius="32dp" />
         </shape>
     </item>
-    <!-- 3. 晶莹剔透的全反射纯白高光外棱角描边 -->
     <item>
         <shape android:shape="rectangle">
             <stroke
-                android:width="2dp"
-                android:color="#F0FFFFFF" />
+                android:width="1.25dp"
+                android:color="#70FFFFFF" />
             <corners android:radius="32dp" />
         </shape>
     </item>

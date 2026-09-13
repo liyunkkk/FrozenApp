@@ -200,8 +200,8 @@
     <string name="freeze_state_v2">❄️ V2 Frozen</string>
     <string name="freeze_state_running">📱 Running</string>
     <string name="freeze_state_idle">Idle</string>
-    <string name="stat_procs_frozen">%1 procs %2 frozen</string>
-    <string name="stat_mem">RSS %1  SWAP %2</string>
+    <string name="stat_procs_frozen">%1$d procs · %2$d frozen</string>
+    <string name="stat_mem">RSS %1$d MB · SWAP %2$d MB</string>
 
     <string name="stat_summary_format">%1$d frozen · %2$d running</string>
     <string name="action_app_details">App Info</string>
