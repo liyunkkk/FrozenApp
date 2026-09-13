@@ -100,10 +100,10 @@ public class AppFreezeAdapter extends RecyclerView.Adapter<AppFreezeAdapter.View
 
         if (info.isRunning()) {
             holder.procStat.setText(context.getString(R.string.stat_procs_frozen, info.procCount, info.frozenCount));
-            holder.memStat.setText(context.getString(R.string.stat_mem, info.rssMb, info.swapMb));
+            holder.memStat.setText(context.getString(R.string.stat_mem, info.rssMb));
         } else {
             holder.procStat.setText(R.string.freeze_state_idle);
-            holder.memStat.setText("RSS 0MB  SWAP 0MB");
+            holder.memStat.setText("RSS 0 MB");
         }
 
         if (info.isFrozen()) {

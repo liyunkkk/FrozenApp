@@ -177,7 +177,7 @@
     <string name="freeze_state_running">📱 运行中</string>
     <string name="freeze_state_idle">未运行</string>
     <string name="stat_procs_frozen">%1$d个进程 · %2$d个已冻结</string>
-    <string name="stat_mem">RSS %1$d MB · SWAP %2$d MB</string>
+    <string name="stat_mem">RSS %1$d MB</string>
 
     <string name="stat_summary_format">%1$d个已冻结 · %2$d个运行中</string>
     <string name="action_app_details">应用详情</string>

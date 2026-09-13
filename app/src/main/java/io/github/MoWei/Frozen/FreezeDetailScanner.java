@@ -162,7 +162,7 @@ public class FreezeDetailScanner {
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
 
-            String cmd = "toybox ps -A -o UID,PID,RSS,NAME,WCHAN | awk 'BEGIN {while((getline f<\"/sys/fs/cgroup/frozen/cgroup.procs\")>0) fr[f]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (fr[$2] || index($5,\"do_freezer\")>0) fc[u]++; while((getline s<(\"/proc/\"$2\"/status\"))>0) {if (s ~ /^VmSwap:/) {split(s, a); sw[u]+=a[2]; break}}; close(\"/proc/\"$2\"/status\")} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024), int(sw[u]/1024)}'\n" +
+            String cmd = "FR=$(cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null | tr \x27\\n\x27 \x27 \x27); toybox ps -A -o UID,PID,RSS,WCHAN | awk -v fr=\"\$FR\" \x27BEGIN {split(fr, a); for (i in a) frozen[a[i]]=1} NR>1 && \$1>=10000 {u=\$1; p[u]++; r[u]+=\$3; if (frozen[\$2] || index(\$4,\\\"do_freezer\\\")>0) fc[u]++} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024)}\x27\n" +
                     "exit\n";
             os.write(cmd.getBytes(StandardCharsets.UTF_8));
             os.flush();
@@ -172,14 +172,13 @@ public class FreezeDetailScanner {
                 line = line.trim();
                 if (line.isEmpty()) continue;
                 String[] parts = line.split("\\s+");
-                if (parts.length >= 5) {
+                if (parts.length >= 4) {
                     try {
                         int uid = Integer.parseInt(parts[0]);
                         int procs = Integer.parseInt(parts[1]);
                         int frozen = Integer.parseInt(parts[2]);
                         int rss = Integer.parseInt(parts[3]);
-                        int swap = Integer.parseInt(parts[4]);
-                        map.put(uid, new StatItem(uid, procs, frozen, rss, swap));
+                        map.put(uid, new StatItem(uid, procs, frozen, rss, 0));
                     } catch (Exception ignored) {
                     }
                 }
@@ -201,7 +200,7 @@ public class FreezeDetailScanner {
     private static SparseArray<StatItem> scanViaSocket() {
         SparseArray<StatItem> map = new SparseArray<>();
         try {
-            int len = Utils.freezeitTask(ManagerCmd.printFreezerProc, null);
+            int len = 0; // 彻底禁止应用列表扫描触发 printFreezerProc，杜绝污染系统日志
             if (len <= 0) return map;
             String text = new String(StaticData.response, 0, len, StandardCharsets.UTF_8);
 

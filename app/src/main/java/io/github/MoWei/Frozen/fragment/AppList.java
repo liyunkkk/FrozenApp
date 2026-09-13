@@ -161,8 +161,10 @@ public class AppList extends Fragment {
             if (info.isRunning()) {
                 sb.append("进程总数: ").append(info.procCount).append("\n");
                 sb.append("已冻结进程: ").append(info.frozenCount).append("\n");
-                sb.append("物理内存 (RSS): ").append(info.rssMb).append("\n");
-                sb.append("交换内存 (SWAP): ").append(info.swapMb).append("\n");
+                sb.append("物理内存 (RSS): ").append(info.rssMb).append(" MB\n");
+                if (info.swapMb > 0) {
+                    sb.append("交换内存 (SWAP): ").append(info.swapMb).append(" MB\n");
+                }
                 sb.append("当前状态: ").append(info.isFrozen() ? "❄️ cgroup v2 冻结中" : "📱 前台/后台运行中");
             } else {
                 sb.append("当前状态: 未运行 (0 进程)");

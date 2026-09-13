@@ -35,7 +35,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: FrozenApp-8.1.1-ui-beta13
+          name: FrozenApp-8.1.1-ui-beta14
           path: app/build/outputs/apk/release/Frozen.apk
           if-no-files-found: error
       - name: Checkout Frozen module
@@ -59,20 +59,20 @@ jobs:
           module-source/FrozenVS/build_pack.sh
           mkdir -p module-output
           cp module-source/FrozenVS/Frozen-*.zip \
-            module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip
+            module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip
       - name: Verify complete module contents
         run: |
-          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip | grep -cx '^Frozen$')" -eq 1
-          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip | grep -cx '^Frozen\.apk$')" -eq 1
-          unzip -p module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip module.prop \
+          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip | grep -cx '^Frozen$')" -eq 1
+          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip | grep -cx '^Frozen\.apk$')" -eq 1
+          unzip -p module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip module.prop \
             | grep -E '^version=9\.0\.3-activity-beta4'
-          unzip -p module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip Frozen.apk \
+          unzip -p module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip Frozen.apk \
             > /tmp/bundled-Frozen.apk
           cmp -s /tmp/bundled-Frozen.apk app/build/outputs/apk/release/Frozen.apk
           test "$(stat -c '%s' /tmp/bundled-Frozen.apk)" -gt 1000000
       - name: Upload complete flashable module
         uses: actions/upload-artifact@v4
         with:
-          name: Frozen-9.0.3-activity-beta4-ui-beta13
-          path: module-output/Frozen-9.0.3-activity-beta4-ui-beta13.zip
+          name: Frozen-9.0.3-activity-beta4-ui-beta14
+          path: module-output/Frozen-9.0.3-activity-beta4-ui-beta14.zip
           if-no-files-found: error
