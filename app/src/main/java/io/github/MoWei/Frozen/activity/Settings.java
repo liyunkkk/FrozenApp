@@ -71,7 +71,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     int varIndexForHandle = 0;
     int newValueForHandle = 0;
 
-    ActivityResultLauncher<Intent> pickPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +98,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.doze_title).setOnClickListener(this);
         findViewById(R.id.debug_title).setOnClickListener(this);
 
-        findViewById(R.id.set_bg).setOnClickListener(this);
 
         freezeModeSpinner = findViewById(R.id.freeze_mode_spinner);
         reFreezeTimeoutSpinner = findViewById(R.id.refreeze_timeout_spinner);
@@ -146,36 +144,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
 
-        pickPicture = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() != RESULT_OK || result.getData() == null ||
-                    result.getData().getData() == null)
-                return;
-
-            try {
-                String imagePath = Utils.getFileAbsolutePath(this, result.getData().getData());
-                var bg = BitmapFactory.decodeFile(imagePath);
-                if (bg == null || bg.getHeight() == 0 || bg.getWidth() == 0) return;
-
-                // 居中截取 宽:高 = 1:2
-                if (bg.getHeight() > 2 * bg.getWidth())
-                    bg = Bitmap.createBitmap(bg, 0, bg.getHeight() / 2 - bg.getWidth(),
-                            bg.getWidth(), bg.getWidth() * 2);
-                else if (bg.getHeight() < 2 * bg.getWidth())
-                    bg = Bitmap.createBitmap(bg, bg.getWidth() / 2 - bg.getHeight() / 4, 0,
-                            bg.getHeight() / 2, bg.getHeight());
-
-                // 限制分辨率
-                if (bg.getWidth() > 1080)
-                    bg = Utils.resize(bg, 1080f / bg.getWidth());
-
-                bg.compress(Bitmap.CompressFormat.JPEG, 90,
-                        openFileOutput(StaticData.bgFileName, Context.MODE_PRIVATE));
-
-                StaticData.bg = new BitmapDrawable(getResources(), bg);
-                StaticData.bg.setAlpha(56);
-            } catch (Exception ignore) {
-            }
-        });
+        
     }
 
     @Override
@@ -382,10 +351,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Utils.textDialog(this, R.string.doze_title, R.string.doze_tips);
         } else if (id == R.id.debug_title) {
             Utils.textDialog(this, R.string.debug_title, R.string.debug_tips);
-        } else if (id == R.id.set_bg) {
-            Intent intent = new Intent("android.intent.action.GET_CONTENT");
-            intent.setType("image/*");
-            pickPicture.launch(intent);
-        }
+
     }
 }

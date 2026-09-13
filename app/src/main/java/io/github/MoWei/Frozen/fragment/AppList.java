@@ -110,7 +110,7 @@ public class AppList extends Fragment {
 
             List<AppFreezeInfo> list;
             try {
-                list = FreezeDetailScanner.scan(ctx.getApplicationContext());
+                list = FreezeDetailScanner.scan(ctx.getApplicationContext(), showIndicator);
             } catch (Throwable error) {
                 Log.e("FrozenAppList", "Failed to scan app freeze details", error);
                 list = java.util.Collections.emptyList();

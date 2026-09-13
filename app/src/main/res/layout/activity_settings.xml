@@ -572,24 +572,7 @@
         </LinearLayout>
 
         <!-- 卡片 5：个性化 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_log_surface"
-            android:orientation="vertical"
-            android:paddingHorizontal="18dp"
-            android:paddingVertical="18dp">
 
-            <TextView
-                android:id="@+id/set_bg"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:gravity="center_vertical"
-                android:text="@string/set_background"
-                android:textColor="@color/md_on_surface"
-                android:textSize="16sp" />
-        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
