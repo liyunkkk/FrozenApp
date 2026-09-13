@@ -35,6 +35,29 @@ public class FreezeDetailScanner {
         }
     }
 
+    public static List<AppFreezeInfo> getFastInstalledList() {
+        List<AppFreezeInfo> result = new ArrayList<>();
+        List<Integer> allUids = AppInfoCache.getUidList();
+        for (int uid : allUids) {
+            AppInfoCache.Info info = AppInfoCache.get(uid);
+            if (info != null && !info.isSystemApp) {
+                result.add(new AppFreezeInfo(
+                        uid,
+                        info.packName,
+                        info.label,
+                        info.icon,
+                        0,
+                        0,
+                        0,
+                        0,
+                        info.isSystemApp
+                ));
+            }
+        }
+        Collections.sort(result, (a, b) -> a.label.compareToIgnoreCase(b.label));
+        return result;
+    }
+
     public static List<AppFreezeInfo> scan(Context context) {
         SparseArray<StatItem> statMap = scanViaRoot();
         if (statMap == null || statMap.size() == 0) {
@@ -125,8 +148,7 @@ public class FreezeDetailScanner {
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
 
-            String cmd = "cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null > /data/local/tmp/frozen.pids\n" +
-                    "toybox ps -A -o UID,PID,RSS,NAME,WCHAN | awk 'BEGIN {while((getline f<\"/data/local/tmp/frozen.pids\")>0) fr[f]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (fr[$2] || index($5,\"do_freezer\")>0) fc[u]++; cmd=\"cat /proc/\" $2 \"/status 2>/dev/null | grep VmSwap\"; if ((cmd | getline s)>0){split(s,a); sw[u]+=a[2]} close(cmd)} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024), int(sw[u]/1024)}'\n" +
+            String cmd = "toybox ps -A -o UID,PID,RSS,NAME,WCHAN | awk 'BEGIN {while((getline f<\"/sys/fs/cgroup/frozen/cgroup.procs\")>0) fr[f]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (fr[$2] || index($5,\"do_freezer\")>0) fc[u]++} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024), 0}'\n" +
                     "exit\n";
 
             os.write(cmd.getBytes(StandardCharsets.UTF_8));

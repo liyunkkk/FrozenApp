@@ -35,11 +35,12 @@
                 <LinearLayout
                     android:id="@+id/stateLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="82dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="82dp"
                     android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="6dp">
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/freezeit_logo"

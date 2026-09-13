@@ -35,7 +35,7 @@ import io.github.MoWei.Frozen.databinding.FragmentAppListBinding;
 import io.github.MoWei.Frozen.model.AppFreezeInfo;
 
 public class AppList extends Fragment {
-
+    private static volatile List<AppFreezeInfo> sCachedList = null;
     private FragmentAppListBinding binding;
     private AppFreezeAdapter adapter;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -45,7 +45,6 @@ public class AppList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAppListBinding.inflate(inflater, container, false);
-
         binding.rvAppList.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AppFreezeAdapter(requireContext());
         binding.rvAppList.setAdapter(adapter);
@@ -56,14 +55,12 @@ public class AppList extends Fragment {
         binding.searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String kw = s != null ? s.toString().trim() : "";
                 adapter.filter(kw);
                 binding.btnClearSearch.setVisibility(kw.isEmpty() ? View.GONE : View.VISIBLE);
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
@@ -74,8 +71,19 @@ public class AppList extends Fragment {
 
         adapter.setOnAppClickListener(this::showAppDetailDialog);
 
-        loadData(true);
-
+        // 瞬间秒开：优先渲染已有完整数据；若首次冷启动则先用快速已安装列表填充首屏
+        if (sCachedList != null && !sCachedList.isEmpty()) {
+            adapter.updateData(sCachedList);
+            updateSummary();
+            loadData(false);
+        } else {
+            List<AppFreezeInfo> fastList = FreezeDetailScanner.getFastInstalledList();
+            if (!fastList.isEmpty()) {
+                adapter.updateData(fastList);
+                updateSummary();
+            }
+            loadData(true);
+        }
         return binding.getRoot();
     }
 
@@ -116,6 +124,7 @@ public class AppList extends Fragment {
                 }
                 isLoading = false;
                 binding.swipeRefresh.setRefreshing(false);
+                sCachedList = result;
                 adapter.updateData(result);
                 updateSummary();
             });

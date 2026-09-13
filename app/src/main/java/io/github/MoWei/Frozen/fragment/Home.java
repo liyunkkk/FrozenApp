@@ -53,8 +53,13 @@ public class Home extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-
         binding.realtimeLayout.setOnClickListener(this);
+        binding.stateLayout.setOnClickListener(v -> {
+            if (!StaticData.hasGetPropInfo) {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                refreshStatus();
+            }
+        });
         binding.cardAppConfigEntry.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), AppConfigActivity.class));
         });
