@@ -27,8 +27,8 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_hero_banner"
                 android:layout_width="match_parent"
-                android:layout_height="114dp"
-                android:layout_marginBottom="6dp"
+                android:layout_height="180dp"
+                android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -132,7 +132,7 @@
                 android:id="@+id/realtimeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="10dp"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
@@ -256,7 +256,7 @@
                     <ImageView
                         android:id="@+id/cpuImg"
                         android:layout_width="match_parent"
-                        android:layout_height="106dp"
+                        android:layout_height="122dp"
                         android:contentDescription="@string/icon" />
 
                     <LinearLayout
@@ -290,8 +290,8 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_app_config_entry"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginBottom="6dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -360,7 +360,7 @@
                 android:id="@+id/version_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="16dp"
@@ -387,7 +387,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="12dp"
-                            android:paddingVertical="9dp">
+                            android:paddingVertical="11dp">
 
                             <FrameLayout
                                 android:layout_width="32dp"
@@ -427,13 +427,6 @@
                                     android:textStyle="bold"
                                     android:typeface="monospace" />
                             </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:contentDescription="@string/icon"
-                                android:src="@drawable/ic_chevron_right_24dp"
-                                app:tint="@color/gray_77" />
                         </LinearLayout>
 
                         <!-- 垂直分割线 -->
@@ -450,7 +443,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="12dp"
-                            android:paddingVertical="9dp">
+                            android:paddingVertical="11dp">
 
                             <FrameLayout
                                 android:layout_width="32dp"
@@ -490,13 +483,6 @@
                                     android:textStyle="bold"
                                     android:typeface="monospace" />
                             </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:contentDescription="@string/icon"
-                                android:src="@drawable/ic_chevron_right_24dp"
-                                app:tint="@color/gray_77" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -521,7 +507,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="12dp"
-                            android:paddingVertical="9dp">
+                            android:paddingVertical="11dp">
 
                             <FrameLayout
                                 android:layout_width="32dp"
@@ -561,13 +547,6 @@
                                     android:textStyle="bold"
                                     android:typeface="monospace" />
                             </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:contentDescription="@string/icon"
-                                android:src="@drawable/ic_chevron_right_24dp"
-                                app:tint="@color/gray_77" />
                         </LinearLayout>
 
                         <!-- 垂直分割线 -->
@@ -584,7 +563,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="12dp"
-                            android:paddingVertical="9dp">
+                            android:paddingVertical="11dp">
 
                             <FrameLayout
                                 android:layout_width="32dp"
@@ -624,13 +603,6 @@
                                     android:textStyle="bold"
                                     android:typeface="monospace" />
                             </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:contentDescription="@string/icon"
-                                android:src="@drawable/ic_chevron_right_24dp"
-                                app:tint="@color/gray_77" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -647,7 +619,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingHorizontal="12dp"
-                        android:paddingVertical="9dp">
+                        android:paddingVertical="11dp">
 
                         <FrameLayout
                             android:layout_width="32dp"
@@ -687,13 +659,6 @@
                                 android:textStyle="bold"
                                 android:typeface="monospace" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:contentDescription="@string/icon"
-                            android:src="@drawable/ic_chevron_right_24dp"
-                            app:tint="@color/gray_77" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

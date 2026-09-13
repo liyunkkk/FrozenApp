@@ -18,7 +18,6 @@ import io.github.MoWei.Frozen.model.AppFreezeInfo;
 
 public class FreezeDetailScanner {
     private static final String TAG = "FreezeScanner";
-
     private static long sLastScanTime = 0;
     private static List<AppFreezeInfo> sCachedResult = null;
 
@@ -71,19 +70,27 @@ public class FreezeDetailScanner {
             return sCachedResult;
         }
 
-        SparseArray<StatItem> statMap = scanViaRoot();
+        if (AppInfoCache.getUidList().isEmpty()) {
+            AppInfoCache.refreshCache(context);
+        }
+
+        // 1. 优先通过本地 Socket 向 Frozen 守护进程索取权威进程快照 (零日志副作用，零 Root 依赖)
+        SparseArray<StatItem> statMap = scanViaSocket();
+
+        // 2. 若守护进程未响应，降级尝试通过 Root 执行系统级扫描
         if (statMap == null || statMap.size() == 0) {
-            statMap = scanViaSocket();
+            statMap = scanViaRoot();
         }
 
         List<AppFreezeInfo> result = new ArrayList<>();
         Set<Integer> visitedUids = new HashSet<>();
 
-        // 1. 先加入扫描到运行/冻结中的应用
+        // 3. 将扫描到的正在运行/已冻结的应用加入列表
         if (statMap != null) {
             for (int i = 0; i < statMap.size(); i++) {
                 StatItem item = statMap.valueAt(i);
                 visitedUids.add(item.uid);
+
                 AppInfoCache.Info info = AppInfoCache.get(item.uid);
                 if (info != null) {
                     result.add(new AppFreezeInfo(
@@ -114,7 +121,7 @@ public class FreezeDetailScanner {
             }
         }
 
-        // 2. 补充已安装的未运行应用，便于搜索
+        // 4. 补充已安装的未运行应用，便于全局搜索与白名单配置
         List<Integer> allUids = AppInfoCache.getUidList();
         for (int uid : allUids) {
             if (!visitedUids.contains(uid)) {
@@ -135,7 +142,7 @@ public class FreezeDetailScanner {
             }
         }
 
-        // 3. 排序：冻结中优先 > 运行中 (按内存降序) > 未运行应用
+        // 5. 排序：冻结中优先 > 运行中 (按内存占用降序) > 未运行应用 (按名称首字母)
         Collections.sort(result, (a, b) -> {
             if (a.isFrozen() != b.isFrozen()) {
                 return a.isFrozen() ? -1 : 1;
@@ -154,6 +161,74 @@ public class FreezeDetailScanner {
         return result;
     }
 
+    private static SparseArray<StatItem> scanViaSocket() {
+        SparseArray<StatItem> map = new SparseArray<>();
+        try {
+            // 命令 62 (printFreezerProc) 底层 server.hpp 中 logToGlobal=false，零日志副作用
+            int len = Utils.freezeitTask(ManagerCmd.printFreezerProc, null);
+            if (len <= 0) return map;
+
+            String text = new String(StaticData.response, 0, len, StandardCharsets.UTF_8);
+            int pIdx = text.lastIndexOf("进程冻结状态:");
+            String sec = (pIdx != -1) ? text.substring(pIdx) : text;
+            String[] lines = sec.split("\n");
+
+            for (String l : lines) {
+                l = l.trim();
+                if (l.isEmpty() || l.startsWith("进程冻结") || l.startsWith("PID") || l.startsWith("总计") || l.startsWith("后台很干净") || l.startsWith("发现")) {
+                    continue;
+                }
+
+                String[] p = l.split("\\s+");
+                if (p.length < 3) continue;
+
+                boolean isFrozen = l.contains("冻结");
+
+                // 标准格式: PID(0) RSS(1) SWAP(2) UID(3) 状态(4) 进程名(5...)
+                if (p.length >= 5 && isInteger(p[0]) && isInteger(p[1]) && isInteger(p[2]) && isInteger(p[3])) {
+                    try {
+                        int rss = Integer.parseInt(p[1]);
+                        int swap = Integer.parseInt(p[2]);
+                        int uid = Integer.parseInt(p[3]);
+
+                        StatItem existing = map.get(uid);
+                        if (existing != null) {
+                            existing.procCount++;
+                            if (isFrozen) existing.frozenCount++;
+                            existing.rssMb += rss;
+                            existing.swapMb += swap;
+                        } else {
+                            map.put(uid, new StatItem(uid, 1, isFrozen ? 1 : 0, rss, swap));
+                        }
+                        continue;
+                    } catch (Exception ignored) {}
+                }
+
+                // 兼容旧格式: PID(0) RSS(1) 状态(2) 进程名(3)
+                if (isInteger(p[0]) && isInteger(p[1])) {
+                    try {
+                        int mib = Integer.parseInt(p[1]);
+                        String appName = p[p.length - 1];
+                        int targetUid = findUidByAppName(appName);
+                        if (targetUid != -1) {
+                            StatItem existing = map.get(targetUid);
+                            if (existing != null) {
+                                existing.procCount++;
+                                if (isFrozen) existing.frozenCount++;
+                                existing.rssMb += mib;
+                            } else {
+                                map.put(targetUid, new StatItem(targetUid, 1, isFrozen ? 1 : 0, mib, 0));
+                            }
+                        }
+                    } catch (Exception ignored) {}
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Socket scan failed: " + e.getMessage());
+        }
+        return map;
+    }
+
     private static SparseArray<StatItem> scanViaRoot() {
         SparseArray<StatItem> map = new SparseArray<>();
         Process process = null;
@@ -161,6 +236,7 @@ public class FreezeDetailScanner {
             process = Runtime.getRuntime().exec("su");
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+
             String cmd = "export PATH=/system/bin:/system/xbin:$PATH\n" +
                     "cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null\n" +
                     "echo ---FROZEN_END---\n" +
@@ -168,6 +244,7 @@ public class FreezeDetailScanner {
                     "exit\n";
             os.write(cmd.getBytes(StandardCharsets.UTF_8));
             os.flush();
+
             String line;
             boolean readingFrozen = true;
             Set<Integer> frozenPids = new HashSet<>();
@@ -178,13 +255,16 @@ public class FreezeDetailScanner {
                     readingFrozen = false;
                     continue;
                 }
+
                 if (readingFrozen) {
                     try {
                         frozenPids.add(Integer.parseInt(line));
                     } catch (Exception ignored) {}
                     continue;
                 }
+
                 if (line.startsWith("UID")) continue;
+
                 String[] parts = line.split("\\s+");
                 if (parts.length >= 3) {
                     try {
@@ -193,6 +273,7 @@ public class FreezeDetailScanner {
                         int pid = Integer.parseInt(parts[1]);
                         int rssKb = Integer.parseInt(parts[2]);
                         String wchan = parts.length >= 4 ? parts[3] : "";
+
                         boolean isFrozen = frozenPids.contains(pid) || wchan.contains("do_freezer");
 
                         StatItem item = map.get(uid);
@@ -222,75 +303,6 @@ public class FreezeDetailScanner {
         return null;
     }
 
-    private static SparseArray<StatItem> scanViaSocket() {
-        SparseArray<StatItem> map = new SparseArray<>();
-        try {
-            int len = 0; // 彻底禁止应用列表扫描触发 printFreezerProc，杜绝污染系统日志
-            if (len <= 0) return map;
-            String text = new String(StaticData.response, 0, len, StandardCharsets.UTF_8);
-
-            int pIdx = text.lastIndexOf("进程冻结状态:");
-            String sec = (pIdx != -1) ? text.substring(pIdx) : text;
-            String[] lines = sec.split("\n");
-
-            for (String l : lines) {
-                l = l.trim();
-                if (l.isEmpty() || l.startsWith("进程冻结") || l.startsWith("PID") || l.startsWith("总计") || l.startsWith("后台很干净") || l.startsWith("发现")) {
-                    continue;
-                }
-
-                String[] p = l.split("\\s+");
-                if (p.length < 3) continue;
-
-                boolean isFrozen = l.contains("冻结");
-
-                // 新版守护进程格式: PID RSS SWAP UID 状态 进程名 (前4项均为数字)
-                if (p.length >= 5 && isInteger(p[0]) && isInteger(p[1]) && isInteger(p[2]) && isInteger(p[3])) {
-                    try {
-                        int rss = Integer.parseInt(p[1]);
-                        int swap = Integer.parseInt(p[2]);
-                        int uid = Integer.parseInt(p[3]);
-
-                        StatItem existing = map.get(uid);
-                        if (existing != null) {
-                            existing.procCount++;
-                            if (isFrozen) existing.frozenCount++;
-                            existing.rssMb += rss;
-                            existing.swapMb += swap;
-                        } else {
-                            map.put(uid, new StatItem(uid, 1, isFrozen ? 1 : 0, rss, swap));
-                        }
-                        continue;
-                    } catch (Exception ignored) {
-                    }
-                }
-
-                // 旧版守护进程格式兼容: PID RSS 状态 进程名 (前2项为数字)
-                if (isInteger(p[0]) && isInteger(p[1])) {
-                    try {
-                        int mib = Integer.parseInt(p[1]);
-                        String appName = p[p.length - 1];
-                        int targetUid = findUidByAppName(appName);
-                        if (targetUid != -1) {
-                            StatItem existing = map.get(targetUid);
-                            if (existing != null) {
-                                existing.procCount++;
-                                if (isFrozen) existing.frozenCount++;
-                                existing.rssMb += mib;
-                            } else {
-                                map.put(targetUid, new StatItem(targetUid, 1, isFrozen ? 1 : 0, mib, 0));
-                            }
-                        }
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Socket fallback scan failed: " + e.getMessage());
-        }
-        return map;
-    }
-
     private static boolean isInteger(String str) {
         if (str == null || str.isEmpty()) return false;
         for (int i = 0; i < str.length(); i++) {
@@ -300,11 +312,20 @@ public class FreezeDetailScanner {
     }
 
     private static int findUidByAppName(String appName) {
+        if (appName == null || appName.isEmpty()) return -1;
+        int colonIdx = appName.indexOf(':');
+        String baseName = colonIdx != -1 ? appName.substring(0, colonIdx) : appName;
+
         List<Integer> uids = AppInfoCache.getUidList();
         for (int uid : uids) {
             AppInfoCache.Info info = AppInfoCache.get(uid);
-            if (info != null && (info.label.equals(appName) || info.packName.contains(appName))) {
-                return uid;
+            if (info != null) {
+                if (info.label.equalsIgnoreCase(appName) || info.label.equalsIgnoreCase(baseName)) {
+                    return uid;
+                }
+                if (info.packName.equalsIgnoreCase(appName) || info.packName.equalsIgnoreCase(baseName)) {
+                    return uid;
+                }
             }
         }
         return -1;
