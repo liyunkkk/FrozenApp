@@ -162,7 +162,7 @@ public class FreezeDetailScanner {
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
 
-            String cmd = "FR=$(cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null | tr \x27\\n\x27 \x27 \x27); toybox ps -A -o UID,PID,RSS,WCHAN | awk -v fr=\"\$FR\" \x27BEGIN {split(fr, a); for (i in a) frozen[a[i]]=1} NR>1 && \$1>=10000 {u=\$1; p[u]++; r[u]+=\$3; if (frozen[\$2] || index(\$4,\\\"do_freezer\\\")>0) fc[u]++} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024)}\x27\n" +
+            String cmd = "FR=$(cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null | tr '\\n' ' '); toybox ps -A -o UID,PID,RSS,WCHAN | awk -v fr=\"$FR\" 'BEGIN {split(fr, a); for (i in a) frozen[a[i]]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (frozen[$2] || index($4,\"do_freezer\")>0) fc[u]++} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024)}'\n" +
                     "exit\n";
             os.write(cmd.getBytes(StandardCharsets.UTF_8));
             os.flush();
