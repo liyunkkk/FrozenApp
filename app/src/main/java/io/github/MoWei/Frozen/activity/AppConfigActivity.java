@@ -317,16 +317,14 @@ public class AppConfigActivity extends AppCompatActivity {
                 case CFG_TERMINATE:
                     return 0;
                 case CFG_SIGSTOP:
-                    return 1;
                 case CFG_SIGSTOP_BR:
-                    return 2;
+                    return 1;
                 default:
                 case CFG_FREEZER:
-                    return 3;
                 case CFG_FREEZER_BR:
-                    return 4;
+                    return 2;
                 case CFG_WHITELIST:
-                    return 5;
+                    return 3;
             }
         }
 
@@ -336,14 +334,10 @@ public class AppConfigActivity extends AppCompatActivity {
                     return CFG_TERMINATE;
                 case 1:
                     return CFG_SIGSTOP;
-                case 2:
-                    return CFG_SIGSTOP_BR;
                 default:
-                case 3:
+                case 2:
                     return CFG_FREEZER;
-                case 4:
-                    return CFG_FREEZER_BR;
-                case 5:
+                case 3:
                     return CFG_WHITELIST;
             }
         }

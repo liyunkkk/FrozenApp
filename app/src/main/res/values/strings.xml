@@ -110,6 +110,8 @@
     <string name="breakNetWork_tips">
         Disconnect the network of frozen apps to save battery
     </string>
+    <string name="netUnfreeze_title">Network Unfreeze ⓘ</string>
+    <string name="netUnfreeze_tips">Collaborates with Re:Kernel network wakeup broadcast to temporarily unfreeze apps on incoming packets.</string>
 
     <string name="developer">Developer 情绪动物 (@liyunkkk)</string>
     <string name="physical_ram_text">[RAM] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>

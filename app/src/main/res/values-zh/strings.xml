@@ -106,6 +106,8 @@
 
     <string name="breakNetWork_title">全局断网 ⓘ</string>
     <string name="breakNetWork_tips">将冻结的应用进行断网操作,节省电量</string>
+    <string name="netUnfreeze_title">网络解冻 ⓘ</string>
+    <string name="netUnfreeze_tips">联动 Re:Kernel 内核网络唤醒广播。当冻结中的应用收到网络数据包时，内核触发主动临时解冻，保障即时消息与推送响应。</string>
 
     <string name="lmk_title">后台优化 ⓘ</string>
     <string name="lmk_tips">调整lmk参数，尽量保留更多应用后台(内存使用量会比较高)。重启生效</string>

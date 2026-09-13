@@ -34,7 +34,6 @@ public class Logcat extends Fragment {
             UPDATE_LABEL_SUCCESS = 2,
             UPDATE_LABEL_FAIL = 3;
 
-    Timer timer;
     int lastLogLen = 0;
     long lastTimestamp = 0;
     boolean isGetWorkLog = true;
@@ -65,8 +64,7 @@ public class Logcat extends Fragment {
                     Utils.layoutDialog(requireContext(), R.layout.help_dialog_logcat);
                 } else if (id == R.id.switch_log) {
                     isGetWorkLog = !isGetWorkLog;
-                    cancelTimer();
-                    resetTimer();
+                    refreshLog();
                 } else if (id == R.id.update_label) {
                     Toast.makeText(requireContext(), R.string.update_start, Toast.LENGTH_SHORT).show();
                     new Thread(() -> {
@@ -117,30 +115,16 @@ public class Logcat extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        cancelTimer();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        resetTimer();
+        refreshLog();
     }
 
-    void cancelTimer() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
-
-    void resetTimer() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                logTask(isGetWorkLog ? ManagerCmd.getLog : ManagerCmd.getXpLog);
-            }
-        }, 0, 5000);
+    void refreshLog() {
+        new Thread(() -> logTask(isGetWorkLog ? ManagerCmd.getLog : ManagerCmd.getXpLog)).start();
     }
 
     void logTask(byte cmd) {
