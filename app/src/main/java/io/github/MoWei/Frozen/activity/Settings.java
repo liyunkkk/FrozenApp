@@ -351,6 +351,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Utils.textDialog(this, R.string.doze_title, R.string.doze_tips);
         } else if (id == R.id.debug_title) {
             Utils.textDialog(this, R.string.debug_title, R.string.debug_tips);
-
+        }
     }
 }
