@@ -28,7 +28,7 @@ public class About extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        findViewById(R.id.container).setBackground(StaticData.getBackgroundDrawable(this));
+        findViewById(R.id.container).setBackgroundResource(R.color.md_background);
     }
 
     @Override

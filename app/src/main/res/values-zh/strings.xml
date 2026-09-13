@@ -150,7 +150,7 @@
     <string name="reject">拒绝</string>
     <string name="accept">接受</string>
     <string name="unknown">未知</string>
-    <string name="moduleEnv">模块环境</string>
+    <string name="moduleEnv">设备型号</string>
     <string name="moduleVer">Frozen版本</string>
     <string name="managerVer">管理器版本</string>
     <string name="kernel_version">内核版本</string>

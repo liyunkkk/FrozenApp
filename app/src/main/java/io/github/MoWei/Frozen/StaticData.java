@@ -38,23 +38,14 @@ public class StaticData {
     public static ActivityManager am;
     public static byte[] response = new byte[0];
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     public static Drawable getBackgroundDrawable(Context context){
         try {
             File bgFile = new File(context.getFilesDir(), bgFileName);
             if (bgFile.exists()) {
-                bgFile.delete(); // 清除历史自定义壁纸，全局恢复默认背景
+                bgFile.delete(); // 清除历史自定义壁纸，全局恢复默认纯色
             }
-            bg = ContextCompat.getDrawable(context, R.drawable.bg);
-            if (bg != null) {
-                bg.setAlpha(56);
-            }
-        } catch (Exception e) {
-            bg = ContextCompat.getDrawable(context, R.drawable.bg);
-            if (bg != null) {
-                bg.setAlpha(56);
-            }
+        } catch (Exception ignored) {
         }
-        return bg;
+        return new android.graphics.drawable.ColorDrawable(ContextCompat.getColor(context, R.color.md_background));
     }
 }

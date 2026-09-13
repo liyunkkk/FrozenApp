@@ -161,32 +161,57 @@ public class FreezeDetailScanner {
             process = Runtime.getRuntime().exec("su");
             DataOutputStream os = new DataOutputStream(process.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-
-            String cmd = "FR=$(cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null | tr '\\n' ' '); toybox ps -A -o UID,PID,RSS,WCHAN | awk -v fr=\"$FR\" 'BEGIN {split(fr, a); for (i in a) frozen[a[i]]=1} NR>1 && $1>=10000 {u=$1; p[u]++; r[u]+=$3; if (frozen[$2] || index($4,\"do_freezer\")>0) fc[u]++} END {for (u in p) print u, p[u], fc[u]+0, int(r[u]/1024)}'\n" +
+            String cmd = "export PATH=/system/bin:/system/xbin:$PATH\n" +
+                    "cat /sys/fs/cgroup/frozen/cgroup.procs 2>/dev/null\n" +
+                    "echo ---FROZEN_END---\n" +
+                    "ps -A -o UID,PID,RSS,WCHAN\n" +
                     "exit\n";
             os.write(cmd.getBytes(StandardCharsets.UTF_8));
             os.flush();
-
             String line;
+            boolean readingFrozen = true;
+            Set<Integer> frozenPids = new HashSet<>();
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
+                if ("---FROZEN_END---".equals(line)) {
+                    readingFrozen = false;
+                    continue;
+                }
+                if (readingFrozen) {
+                    try {
+                        frozenPids.add(Integer.parseInt(line));
+                    } catch (Exception ignored) {}
+                    continue;
+                }
+                if (line.startsWith("UID")) continue;
                 String[] parts = line.split("\\s+");
-                if (parts.length >= 4) {
+                if (parts.length >= 3) {
                     try {
                         int uid = Integer.parseInt(parts[0]);
-                        int procs = Integer.parseInt(parts[1]);
-                        int frozen = Integer.parseInt(parts[2]);
-                        int rss = Integer.parseInt(parts[3]);
-                        map.put(uid, new StatItem(uid, procs, frozen, rss, 0));
-                    } catch (Exception ignored) {
-                    }
+                        if (uid < 10000) continue;
+                        int pid = Integer.parseInt(parts[1]);
+                        int rssKb = Integer.parseInt(parts[2]);
+                        String wchan = parts.length >= 4 ? parts[3] : "";
+                        boolean isFrozen = frozenPids.contains(pid) || wchan.contains("do_freezer");
+
+                        StatItem item = map.get(uid);
+                        if (item == null) {
+                            item = new StatItem(uid, 0, 0, 0, 0);
+                            map.put(uid, item);
+                        }
+                        item.procCount++;
+                        if (isFrozen) {
+                            item.frozenCount++;
+                        }
+                        item.rssMb += (rssKb / 1024);
+                    } catch (Exception ignored) {}
                 }
             }
             process.waitFor();
             if (map.size() > 0) return map;
         } catch (Exception e) {
-            Log.w(TAG, "Root scan failed, fallback to socket: " + e.getMessage());
+            Log.w(TAG, "Root scan failed: " + e.getMessage());
         } finally {
             if (process != null) {
                 try {

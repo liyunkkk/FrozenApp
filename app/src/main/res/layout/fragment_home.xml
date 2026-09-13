@@ -57,17 +57,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_banner_overlay" />
 
-                    <!-- 右侧冷冻雪花大徽标 (装饰) -->
-                    <ImageView
-                        android:layout_width="86dp"
-                        android:layout_height="86dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="16dp"
-                        android:alpha="0.18"
-                        android:contentDescription="@string/icon"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/icon" />
-
                     <!-- 内容层: 标题 + 副标题 + 状态胶囊 -->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -366,11 +355,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 卡片 4: 设备与环境信息卡片 (双列紧凑，无多余空白，一屏容纳) -->
+            <!-- 卡片 4: 设备与环境信息卡片 (一比一精准还原图 2 网格样式) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/version_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="16dp"
@@ -380,160 +370,330 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp">
+                    android:orientation="vertical">
 
-                    <!-- 第 1 行: 内核版本 + Android 版本 -->
+                    <!-- 第 1 行: 内核版本 + 安卓版本 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="3dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
+                        <!-- 左: 内核版本 -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="9dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/kernel_version"
-                                android:textColor="@color/md_on_surface_variant"
-                                android:textSize="11sp" />
+                            <FrameLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_badge_green">
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="@string/icon"
+                                    android:src="@drawable/ic_chip_24dp" />
+                            </FrameLayout>
 
-                            <TextView
-                                android:id="@+id/kernel_ver"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="@string/unknown"
-                                android:textColor="@color/md_on_surface"
-                                android:textSize="11sp"
-                                android:typeface="monospace" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/kernel_version"
+                                    android:textColor="@color/md_on_surface_variant"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/kernel_ver"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/unknown"
+                                    android:textColor="@color/md_on_surface"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold"
+                                    android:typeface="monospace" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@string/icon"
+                                android:src="@drawable/ic_chevron_right_24dp"
+                                app:tint="@color/gray_77" />
                         </LinearLayout>
 
+                        <!-- 垂直分割线 -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="36dp"
+                            android:background="#14000000" />
+
+                        <!-- 右: 安卓版本 -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="9dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/android_version"
-                                android:textColor="@color/md_on_surface_variant"
-                                android:textSize="11sp" />
+                            <FrameLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_badge_blue">
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="@string/icon"
+                                    android:src="@drawable/ic_clock_24dp" />
+                            </FrameLayout>
 
-                            <TextView
-                                android:id="@+id/android_ver"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="@string/unknown"
-                                android:textColor="@color/md_on_surface"
-                                android:textSize="11sp"
-                                android:typeface="monospace" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/android_version"
+                                    android:textColor="@color/md_on_surface_variant"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/android_ver"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/unknown"
+                                    android:textColor="@color/md_on_surface"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold"
+                                    android:typeface="monospace" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@string/icon"
+                                android:src="@drawable/ic_chevron_right_24dp"
+                                app:tint="@color/gray_77" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- 第 2 行: 模块环境 + 模块版本 -->
+                    <!-- 水平分割线 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#14000000" />
+
+                    <!-- 第 2 行: 设备型号 (模块环境) + Frozen版本 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="3dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
+                        <!-- 左: 设备型号 -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="9dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/moduleEnv"
-                                android:textColor="@color/md_on_surface_variant"
-                                android:textSize="11sp" />
+                            <FrameLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_badge_purple">
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="@string/icon"
+                                    android:src="@drawable/ic_device_chip_24dp" />
+                            </FrameLayout>
 
-                            <TextView
-                                android:id="@+id/module_env"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="@string/unknown"
-                                android:textColor="@color/md_on_surface"
-                                android:textSize="11sp"
-                                android:typeface="monospace" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/moduleEnv"
+                                    android:textColor="@color/md_on_surface_variant"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/module_env"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/unknown"
+                                    android:textColor="@color/md_on_surface"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold"
+                                    android:typeface="monospace" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@string/icon"
+                                android:src="@drawable/ic_chevron_right_24dp"
+                                app:tint="@color/gray_77" />
                         </LinearLayout>
 
+                        <!-- 垂直分割线 -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="36dp"
+                            android:background="#14000000" />
+
+                        <!-- 右: Frozen版本 -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="9dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/moduleVer"
-                                android:textColor="@color/md_on_surface_variant"
-                                android:textSize="11sp" />
+                            <FrameLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_badge_cyan">
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="@string/icon"
+                                    android:src="@drawable/ic_star_outline_24dp" />
+                            </FrameLayout>
 
-                            <TextView
-                                android:id="@+id/module_ver"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:text="@string/unknown"
-                                android:textColor="@color/md_on_surface"
-                                android:textSize="11sp"
-                                android:typeface="monospace" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/moduleVer"
+                                    android:textColor="@color/md_on_surface_variant"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/module_ver"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/unknown"
+                                    android:textColor="@color/md_on_surface"
+                                    android:textSize="12.5sp"
+                                    android:textStyle="bold"
+                                    android:typeface="monospace" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@string/icon"
+                                android:src="@drawable/ic_chevron_right_24dp"
+                                app:tint="@color/gray_77" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- 第 3 行: 管理器版本 -->
+                    <!-- 水平分割线 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#14000000" />
+
+                    <!-- 第 3 行: 管理器版本 (通栏) -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingVertical="3dp">
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="9dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/managerVer"
-                            android:textColor="@color/md_on_surface_variant"
-                            android:textSize="11sp" />
+                        <FrameLayout
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_badge_green">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@string/icon"
+                                android:src="@drawable/ic_tag_24dp" />
+                        </FrameLayout>
 
-                        <TextView
-                            android:id="@+id/manager_ver"
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="@string/unknown"
-                            android:textColor="@color/md_on_surface"
-                            android:textSize="11sp"
-                            android:typeface="monospace" />
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/managerVer"
+                                android:textColor="@color/md_on_surface_variant"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/manager_ver"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="@string/unknown"
+                                android:textColor="@color/md_on_surface"
+                                android:textSize="12.5sp"
+                                android:textStyle="bold"
+                                android:typeface="monospace" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/icon"
+                            android:src="@drawable/ic_chevron_right_24dp"
+                            app:tint="@color/gray_77" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

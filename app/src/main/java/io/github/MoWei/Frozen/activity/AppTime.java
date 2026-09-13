@@ -82,7 +82,7 @@ public class  AppTime extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        findViewById(R.id.container).setBackground(StaticData.getBackgroundDrawable(this));
+        findViewById(R.id.container).setBackgroundResource(R.color.md_background);
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
