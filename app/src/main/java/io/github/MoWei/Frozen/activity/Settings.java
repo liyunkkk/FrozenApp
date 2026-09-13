@@ -41,7 +41,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch batterySwitch, currentSwitch,  doubleCellSwitch, BootFreezeSwitch, BinderFreezerSwitch,
-            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch, breakNetWorkSwitch,
+            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch,
             netUnfreezeSwitch, lmkSwitch, dozeSwitch, debugSwitch;
     final int freezeTimeoutIdx = 2;
     final int wakeupTimeoutIdx = 3;
@@ -92,9 +92,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.MemoryReclaim_title).setOnClickListener(this);
         findViewById(R.id.ClearBettryWhllelist_title).setOnClickListener(this);
         findViewById(R.id.unFreezerTemporar_title).setOnClickListener(this);
-        if (findViewById(R.id.breakNetWork_title) != null) {
-            findViewById(R.id.breakNetWork_title).setOnClickListener(this);
-        }
         if (findViewById(R.id.netUnfreeze_title) != null) {
             findViewById(R.id.netUnfreeze_title).setOnClickListener(this);
         }
@@ -137,7 +134,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         MemoryReclaimSwitch = findViewById(R.id.switch_MemoryReclaim);
         ClearBettryWhllelistSwitch = findViewById(R.id.switch_ClearBettryWhllelist);
         unFreezerTemporarSwitch = findViewById(R.id.switch_unFreezerTemporar);
-        breakNetWorkSwitch = findViewById(R.id.switch_breakNetWork);
         netUnfreezeSwitch = findViewById(R.id.switch_netUnfreeze);
 
         lmkSwitch = findViewById(R.id.switch_lmk);
@@ -329,9 +325,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     InitSwitch(MemoryReclaimSwitch, MemoryReclaimIdx);
                     InitSwitch(ClearBettryWhllelistSwitch, ClearBettryWhllelistIdx);
                     InitSwitch(unFreezerTemporarSwitch, unFreezerTemporarIdx);
-                    if (breakNetWorkSwitch != null) {
-                        InitSwitch(breakNetWorkSwitch, breakNetWorkIdx);
-                    }
                     if (netUnfreezeSwitch != null) {
                         InitSwitch(netUnfreezeSwitch, netUnfreezeIdx);
                     }
@@ -381,8 +374,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Utils.textDialog(this, R.string.ClearBettryWhllelist_title, R.string.ClearBettryWhllelist_tips);
         } else if (id == R.id.unFreezerTemporar_title) {
             Utils.textDialog(this, R.string.unFreezerTemporary_title, R.string.unFreezerTemporary_tips);
-        } else if (id == R.id.breakNetWork_title) {
-            Utils.textDialog(this, R.string.breakNetWork_title, R.string.breakNetWork_tips);
         } else if (id == R.id.netUnfreeze_title) {
             Utils.textDialog(this, R.string.netUnfreeze_title, R.string.netUnfreeze_tips);
         } else if (id == R.id.lmk_title) {
