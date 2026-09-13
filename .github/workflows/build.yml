@@ -35,7 +35,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: FrozenApp-8.1.1-ui-beta10
+          name: FrozenApp-8.1.1-ui-beta11
           path: app/build/outputs/apk/release/Frozen.apk
           if-no-files-found: error
 
@@ -63,15 +63,15 @@ jobs:
 
           mkdir -p module-output
           cp module-source/FrozenVS/Frozen-*.zip \
-            module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip
+            module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip
 
       - name: Verify complete module contents
         run: |
-          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip | grep -cx '^Frozen$')" -eq 1
-          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip | grep -cx '^Frozen\.apk$')" -eq 1
-          unzip -p module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip module.prop \
+          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip | grep -cx '^Frozen$')" -eq 1
+          test "$(unzip -Z1 module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip | grep -cx '^Frozen\.apk$')" -eq 1
+          unzip -p module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip module.prop \
             | grep -E '^version=9\.0\.3-activity-beta3'
-          unzip -p module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip Frozen.apk \
+          unzip -p module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip Frozen.apk \
             > /tmp/bundled-Frozen.apk
           cmp -s /tmp/bundled-Frozen.apk app/build/outputs/apk/release/Frozen.apk
           test "$(stat -c '%s' /tmp/bundled-Frozen.apk)" -gt 1000000
@@ -79,6 +79,6 @@ jobs:
       - name: Upload complete flashable module
         uses: actions/upload-artifact@v4
         with:
-          name: Frozen-9.0.3-activity-beta3-ui-beta10
-          path: module-output/Frozen-9.0.3-activity-beta3-ui-beta10.zip
+          name: Frozen-9.0.3-activity-beta3-ui-beta11
+          path: module-output/Frozen-9.0.3-activity-beta3-ui-beta11.zip
           if-no-files-found: error
