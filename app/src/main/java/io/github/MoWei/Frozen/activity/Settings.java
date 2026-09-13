@@ -184,7 +184,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         new Thread(() -> {
             var recvLen = Utils.freezeitTask(ManagerCmd.getSettings, null);
             if (recvLen != 256) {
-                Toast.makeText(getBaseContext(), getString(R.string.get_settings_fail), Toast.LENGTH_LONG).show();
+                // 修复: 后台线程无 Looper, 切主线程 Toast, 否则 RuntimeException 闪退
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(getBaseContext(), getString(R.string.get_settings_fail), Toast.LENGTH_LONG).show());
                 return;
             }
             System.arraycopy(StaticData.response, 0, settingsVar, 0, 256);

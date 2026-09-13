@@ -8,6 +8,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -70,8 +72,11 @@ public class AppInfoCache {
                         new Info(appInfo.loadIcon(pm), appInfo.packageName, label, appInfo.uid, isSystemApp));
             }
 
-            if(cacheInfo.size() < 2)
-                Toast.makeText(context, context.getString(R.string.appFailTips), Toast.LENGTH_LONG).show();
+            if (cacheInfo.size() < 2) {
+                // 修复: 后台线程无 Looper, Toast 必须切到主线程, 否则 RuntimeException 闪退
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(context, context.getString(R.string.appFailTips), Toast.LENGTH_LONG).show());
+            }
         }
     }
 
