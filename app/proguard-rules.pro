@@ -31,3 +31,6 @@ public boolean isXposedActive();
 -keep public class io.github.MoWei.Frozen.activity.AppConfigActivity extends androidx.appcompat.app.AppCompatActivity {
     public <init>();
 }
+
+# libxposed API is compileOnly; the framework supplies these classes at runtime.
+-dontwarn io.github.libxposed.**
