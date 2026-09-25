@@ -38,32 +38,60 @@ public class Config {
     public boolean initField = false;
 
     public final boolean isCurProcStateInitialized() {
-        return mCurProcStateField != null && processRecordStateField != null;
+        return mCurProcStateField != null;
+    }
+
+    /**
+     * 按类名查找字段, 类不存在或字段不存在都返回 null(不抛异常)。
+     * 注意 getDeclaredField 不跨父类, 因此 A17 上必须显式指定字段实际所在的基类。
+     */
+    private static Field tryGetDeclaredField(ClassLoader classLoader, String className, String fieldName) {
+        try {
+            return Class.forName(className, true, classLoader).getDeclaredField(fieldName);
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     @SuppressLint("PrivateApi")
     public String Init(ClassLoader classLoader) {
         try {
             // 需进入桌面后才能初始化
-            mCurProcStateField = Class.forName(Enum.Class.ProcessStateRecord, true, classLoader).getDeclaredField(Enum.Field.mCurProcState);
             processRecordUidField = Class.forName(Enum.Class.ProcessRecord, true, classLoader).getDeclaredField(Enum.Field.uid);
             broadcastFilterOwningUidField = Class.forName(Enum.Class.BroadcastFilter, true, classLoader).getDeclaredField(Enum.Field.owningUid);
             broadcastRecordCallingUidField = Class.forName(Enum.Class.BroadcastRecord, true, classLoader).getDeclaredField(Enum.Field.callingUid);
             broadcastRecordDeliveryField = Class.forName(Enum.Class.BroadcastRecord, true, classLoader).getDeclaredField(Enum.Field.delivery);
             serviceRecordDefiningUidField = Class.forName(Enum.Class.ServiceRecord, true, classLoader).getDeclaredField(Enum.Field.definingUid);
             alarmUidField = Class.forName(Enum.Class.AlarmS, true, classLoader).getDeclaredField(Enum.Field.uid);
-            processRecordStateField = Class.forName(Enum.Class.ProcessRecord, true, classLoader).getDeclaredField(Enum.Field.mState);
             mScreenStateField = Class.forName(Enum.Class.DisplayPowerState, true, classLoader).getDeclaredField(Enum.Field.mScreenState);
 
-            mCurProcStateField.setAccessible(true);
             processRecordUidField.setAccessible(true);
             broadcastFilterOwningUidField.setAccessible(true);
             broadcastRecordCallingUidField.setAccessible(true);
             broadcastRecordDeliveryField.setAccessible(true);
             serviceRecordDefiningUidField.setAccessible(true);
             alarmUidField.setAccessible(true);
-            processRecordStateField.setAccessible(true);
             mScreenStateField.setAccessible(true);
+
+            // mCurProcState 的存放位置随 SDK 漂移, 两种布局依次尝试:
+            //   SDK x ~ 36 : ProcessRecord.mState -> ProcessStateRecord.mCurProcState (getDeclaredField 不跨父类, 故需两跳)
+            //   SDK 37+ (Android 17): ProcessStateRecord 被移除, mCurProcState 上移至 ProcessRecord 的新基类
+            //                          psc.ProcessRecordInternal, 此时无需两跳
+            mCurProcStateField = tryGetDeclaredField(classLoader, Enum.Class.ProcessStateRecord, Enum.Field.mCurProcState);
+            if (mCurProcStateField != null) {
+                processRecordStateField = tryGetDeclaredField(classLoader, Enum.Class.ProcessRecord, Enum.Field.mState);
+                if (processRecordStateField != null)
+                    processRecordStateField.setAccessible(true);
+            } else {
+                // A17 布局: 直接读 ProcessRecord 实例上的 mCurProcState (字段实际定义在其基类)
+                mCurProcStateField = tryGetDeclaredField(classLoader, Enum.Class.ProcessRecordInternal, Enum.Field.mCurProcState);
+            }
+            if (mCurProcStateField != null)
+                mCurProcStateField.setAccessible(true);
+
+            // mCurProcState 是前台判定与冻结的核心依据, 取不到则整体初始化失败
+            if (mCurProcStateField == null)
+                throw new NoSuchFieldException(Enum.Field.mCurProcState);
 
             initField = true;
             return "[SUCCESS]";
@@ -93,8 +121,11 @@ public class Config {
     }
 
     public final Object getProcessRecordState(@NonNull Object obj) {
+        // A17: processRecordStateField 为 null, mCurProcState 直接挂在 ProcessRecord 上(实际定义于基类),
+        // 因此直接把 ProcessRecord 自身作为读取目标返回
+        if (processRecordStateField == null) return obj;
         try {
-            return processRecordStateField.get(obj); // isCurProcStateInitialized() 已判空
+            return processRecordStateField.get(obj);
         } catch (Exception e) {
             return null;
         }
@@ -102,7 +133,7 @@ public class Config {
 
     public final int getCurProcState(@NonNull Object obj) {
         try {
-            return mCurProcStateField.getInt(obj); // isCurProcStateInitialized() 已判空
+            return mCurProcStateField == null ? -1 : mCurProcStateField.getInt(obj);
         } catch (Exception e) {
             return -1;
         }

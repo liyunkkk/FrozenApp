@@ -103,7 +103,12 @@ public class FreezeitService {
             }
         };
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA)
+            // Android 16/17: AppOpsService 构造函数为 (File, Handler, Context)
+            // (Android 15 的 (File, File, Handler, Context) 重载在 A16 起已被移除)
+            XpUtils.hookConstructor(WAK_TAG, classLoader, AppOpsHook, Enum.Class.AppOpsService,
+                    File.class, Handler.class, Context.class);
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)  // A14-15
             XpUtils.hookConstructor(WAK_TAG, classLoader, AppOpsHook, Enum.Class.AppOpsService,
                     File.class, File.class, Handler.class, Context.class);
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)   // A11-13
@@ -124,7 +129,8 @@ public class FreezeitService {
             }
         }, Enum.Class.DisplayPowerController, Enum.Method.initialize, int.class);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && Build.VERSION.SDK_INT != Build.VERSION_CODES.BAKLAVA)
+        // DisplayPowerController2 仅 SDK 34 ~ 36 存在, Android 17 (SDK 37) 起已移除
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
             XpUtils.hookMethod(DPC_TAG, classLoader, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) {
