@@ -47,9 +47,28 @@ public class Config {
      */
     private static Field tryGetDeclaredField(ClassLoader classLoader, String className, String fieldName) {
         try {
-            return Class.forName(className, true, classLoader).getDeclaredField(fieldName);
+            final Class<?> c = Class.forName(className, true, classLoader);
+            // [A17-FIX] 沿继承链查找: Android 17 把 ProcessRecord 的 uid 等字段上移到
+            // psc.ProcessRecordInternal 等基类, getDeclaredField 不跨父类会直接失败,
+            // 进而抛 NoSuchFieldException 让整个 Init() 失败(实测日志:
+            //  "No field uid in class Lcom/android/server/am/ProcessRecord")。
+            for (Class<?> k = c; k != null && k != Object.class; k = k.getSuperclass()) {
+                try {
+                    return k.getDeclaredField(fieldName);
+                } catch (NoSuchFieldException ignored) {
+                }
+            }
         } catch (Throwable t) {
-            return null;
+        }
+        return null;
+    }
+
+    /** [A17-FIX] 空安全地打开字段访问权限: 字段缺失时不再抛 NPE 打断整个 Init() */
+    private static void safeAccessible(Field f) {
+        if (f == null) return;
+        try {
+            f.setAccessible(true);
+        } catch (Throwable ignored) {
         }
     }
 
@@ -57,21 +76,21 @@ public class Config {
     public String Init(ClassLoader classLoader) {
         try {
             // 需进入桌面后才能初始化
-            processRecordUidField = Class.forName(Enum.Class.ProcessRecord, true, classLoader).getDeclaredField(Enum.Field.uid);
-            broadcastFilterOwningUidField = Class.forName(Enum.Class.BroadcastFilter, true, classLoader).getDeclaredField(Enum.Field.owningUid);
-            broadcastRecordCallingUidField = Class.forName(Enum.Class.BroadcastRecord, true, classLoader).getDeclaredField(Enum.Field.callingUid);
-            broadcastRecordDeliveryField = Class.forName(Enum.Class.BroadcastRecord, true, classLoader).getDeclaredField(Enum.Field.delivery);
-            serviceRecordDefiningUidField = Class.forName(Enum.Class.ServiceRecord, true, classLoader).getDeclaredField(Enum.Field.definingUid);
-            alarmUidField = Class.forName(Enum.Class.AlarmS, true, classLoader).getDeclaredField(Enum.Field.uid);
-            mScreenStateField = Class.forName(Enum.Class.DisplayPowerState, true, classLoader).getDeclaredField(Enum.Field.mScreenState);
+            processRecordUidField = tryGetDeclaredField(classLoader, Enum.Class.ProcessRecord, Enum.Field.uid);
+            broadcastFilterOwningUidField = tryGetDeclaredField(classLoader, Enum.Class.BroadcastFilter, Enum.Field.owningUid);
+            broadcastRecordCallingUidField = tryGetDeclaredField(classLoader, Enum.Class.BroadcastRecord, Enum.Field.callingUid);
+            broadcastRecordDeliveryField = tryGetDeclaredField(classLoader, Enum.Class.BroadcastRecord, Enum.Field.delivery);
+            serviceRecordDefiningUidField = tryGetDeclaredField(classLoader, Enum.Class.ServiceRecord, Enum.Field.definingUid);
+            alarmUidField = tryGetDeclaredField(classLoader, Enum.Class.AlarmS, Enum.Field.uid);
+            mScreenStateField = tryGetDeclaredField(classLoader, Enum.Class.DisplayPowerState, Enum.Field.mScreenState);
 
-            processRecordUidField.setAccessible(true);
-            broadcastFilterOwningUidField.setAccessible(true);
-            broadcastRecordCallingUidField.setAccessible(true);
-            broadcastRecordDeliveryField.setAccessible(true);
-            serviceRecordDefiningUidField.setAccessible(true);
-            alarmUidField.setAccessible(true);
-            mScreenStateField.setAccessible(true);
+            safeAccessible(processRecordUidField);
+            safeAccessible(broadcastFilterOwningUidField);
+            safeAccessible(broadcastRecordCallingUidField);
+            safeAccessible(broadcastRecordDeliveryField);
+            safeAccessible(serviceRecordDefiningUidField);
+            safeAccessible(alarmUidField);
+            safeAccessible(mScreenStateField);
 
             // mCurProcState 的存放位置随 SDK 漂移, 两种布局依次尝试:
             //   SDK x ~ 36 : ProcessRecord.mState -> ProcessStateRecord.mCurProcState (getDeclaredField 不跨父类, 故需两跳)
@@ -81,17 +100,29 @@ public class Config {
             if (mCurProcStateField != null) {
                 processRecordStateField = tryGetDeclaredField(classLoader, Enum.Class.ProcessRecord, Enum.Field.mState);
                 if (processRecordStateField != null)
-                    processRecordStateField.setAccessible(true);
+                    safeAccessible(processRecordStateField);
             } else {
                 // A17 布局: 直接读 ProcessRecord 实例上的 mCurProcState (字段实际定义在其基类)
                 mCurProcStateField = tryGetDeclaredField(classLoader, Enum.Class.ProcessRecordInternal, Enum.Field.mCurProcState);
             }
             if (mCurProcStateField != null)
-                mCurProcStateField.setAccessible(true);
+                safeAccessible(mCurProcStateField);
 
             // mCurProcState 是前台判定与冻结的核心依据, 取不到则整体初始化失败
             if (mCurProcStateField == null)
                 throw new NoSuchFieldException(Enum.Field.mCurProcState);
+
+            // [A17-FIX] 字段解析结果落盘, 便于定位 AOSP 漂移
+            XpUtils.log("Frozen[InitField]",
+                    "uid=" + (processRecordUidField != null)
+                            + " owningUid=" + (broadcastFilterOwningUidField != null)
+                            + " callingUid=" + (broadcastRecordCallingUidField != null)
+                            + " delivery=" + (broadcastRecordDeliveryField != null)
+                            + " definingUid=" + (serviceRecordDefiningUidField != null)
+                            + " alarmUid=" + (alarmUidField != null)
+                            + " screenState=" + (mScreenStateField != null)
+                            + " mCurProcState=" + (mCurProcStateField != null)
+                            + " mState=" + (processRecordStateField != null));
 
             initField = true;
             return "[SUCCESS]";

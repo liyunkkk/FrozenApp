@@ -2,10 +2,9 @@ package io.github.MoWei.Frozen.hook;
 
 import android.os.Build;
 
-import io.github.libxposed.api.XposedModule;
-import io.github.libxposed.api.XposedModuleInterface.PackageReadyParam;
-import io.github.libxposed.api.XposedModuleInterface.SystemServerStartingParam;
+import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import io.github.MoWei.Frozen.BuildConfig;
 import io.github.MoWei.Frozen.hook.android.AlarmHook;
 import io.github.MoWei.Frozen.hook.android.BroadCastHook;
@@ -27,38 +26,40 @@ import io.github.MoWei.Frozen.hook.android.CachedAppOptimizer.CachedAppOptimizer
 import io.github.MoWei.Frozen.hook.android.CachedAppOptimizer.DisableUseFreezerHook;
 import io.github.MoWei.Frozen.hook.android.CachedAppOptimizer.MilletDisable;
 import io.github.MoWei.Frozen.hook.android.Job.JobSchedulerHook;
-public class Hook extends XposedModule {
+
+/**
+ * [A17-FIX] 回到 legacy 入口。
+ *
+ * 背景(实测, Android 17 / LSPosed v2.2.0):
+ *   - 存在 META-INF/xposed/java_init.list 时, LSPosed 把模块判为 modern(legacy=false),
+ *     只走 LSPosedContext 的 modern 通道; 此时框架侧的 legacy bridge 未就绪,
+ *     业务代码里 de.robv.android.xposed.XC_MethodHook 等 legacy 类在 system_server 中
+ *     解析失败, 抛出:
+ *       NoClassDefFoundError: Failed resolution of: LQgpc/T/LGCnILscJx/GR/y/XC_MethodHook;
+ *     导致 hookAndroid() 第一步即中断(此前表现为 @FrozenXposedServer 永不创建,
+ *     native 侧报 "handlePendingIntent() 工作异常")。
+ *   - 反例: 纯 legacy 模块(只有 assets/xposed_init, 无 java_init.list)如 BackgroundOpt
+ *     在本机工作正常, 证明 legacy 通道在 Android 17 上依然可用。
+ *
+ * 因此删除 java_init.list 并让入口类实现 IXposedHookLoadPackage, 复用全部既有 hook 代码。
+ */
+public class Hook implements IXposedHookLoadPackage {
 
     private static final java.util.concurrent.atomic.AtomicBoolean androidHooked =
             new java.util.concurrent.atomic.AtomicBoolean(false);
 
-    /** [A17-FIX] 无参构造器：被 LSPosed 实例化的瞬间就留下痕迹，
-     *  用于区分「模块未加载」与「模块已加载但回调未触发」两种情况。 */
+    /** [A17-FIX] 无参构造器: 被框架实例化的瞬间就留下痕迹 */
     public Hook() {
-        XpUtils.moduleRef = this;
-        XpUtils.log("Frozen[Xposed]", "entry constructed");
+        XpUtils.log("Frozen[Xposed]", "entry constructed (legacy)");
     }
 
     @Override
-    public void onPackageReady(PackageReadyParam param) {
-        XpUtils.moduleRef = this;
-        XpUtils.log("Frozen[Xposed]", "onPackageReady: " + param.getPackageName());
+    public void handleLoadPackage(LoadPackageParam lpParam) {
         try {
-            dispatch(param.getPackageName(), param.getClassLoader());
+            XpUtils.log("Frozen[Xposed]", "handleLoadPackage: " + lpParam.packageName);
+            dispatch(lpParam.packageName, lpParam.classLoader);
         } catch (Throwable t) {
-            XpUtils.log("Frozen[Xposed]", "onPackageReady failed: " + t);
-        }
-    }
-
-    @Override
-    public void onSystemServerStarting(SystemServerStartingParam param) {
-        XpUtils.moduleRef = this;
-        XpUtils.log("Frozen[Xposed]", "onSystemServerStarting");
-        try {
-            if (androidHooked.compareAndSet(false, true))
-                hookAndroid(param.getClassLoader());
-        } catch (Throwable t) {
-            XpUtils.log("Frozen[Xposed]", "onSystemServerStarting failed: " + t);
+            XpUtils.log("Frozen[Xposed]", "handleLoadPackage failed: " + t);
         }
     }
 
