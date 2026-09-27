@@ -32,8 +32,17 @@ public class Hook extends XposedModule {
     private static final java.util.concurrent.atomic.AtomicBoolean androidHooked =
             new java.util.concurrent.atomic.AtomicBoolean(false);
 
+    /** [A17-FIX] 无参构造器：被 LSPosed 实例化的瞬间就留下痕迹，
+     *  用于区分「模块未加载」与「模块已加载但回调未触发」两种情况。 */
+    public Hook() {
+        XpUtils.moduleRef = this;
+        XpUtils.log("Frozen[Xposed]", "entry constructed");
+    }
+
     @Override
     public void onPackageReady(PackageReadyParam param) {
+        XpUtils.moduleRef = this;
+        XpUtils.log("Frozen[Xposed]", "onPackageReady: " + param.getPackageName());
         try {
             dispatch(param.getPackageName(), param.getClassLoader());
         } catch (Throwable t) {
@@ -43,6 +52,8 @@ public class Hook extends XposedModule {
 
     @Override
     public void onSystemServerStarting(SystemServerStartingParam param) {
+        XpUtils.moduleRef = this;
+        XpUtils.log("Frozen[Xposed]", "onSystemServerStarting");
         try {
             if (androidHooked.compareAndSet(false, true))
                 hookAndroid(param.getClassLoader());

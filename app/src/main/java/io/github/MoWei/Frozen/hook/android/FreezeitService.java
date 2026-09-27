@@ -56,6 +56,13 @@ public class FreezeitService {
         this.config = config;
         this.classLoader = classLoader;
 
+        // [A17-FIX] 通信通道必须最先建立。
+        // 原实现把 serverThread.start() 放在构造函数最后一行，前面任何一步 hook 抛异常
+        // 都会让 native 侧永远连不上 @FrozenXposedServer，表现为
+        // "handlePendingIntent() 工作异常, 请确认LSPosed中Frozen是否已经勾选系统框架"，
+        // 且前台列表/后台意图全部拿不到，冻结功能整体停摆。
+        serverThread.start();
+
         // A10-13 ActivityManagerService
         // https://cs.android.com/android/platform/superproject/main/+/main:frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java
         XpUtils.hookConstructor(AMS_TAG, classLoader, new XC_MethodHook() {
@@ -139,7 +146,6 @@ public class FreezeitService {
                 }
             }, Enum.Class.DisplayPowerController2, Enum.Method.initialize, int.class);
 
-        serverThread.start();
     }
 
     class LocalSocketServer extends Thread {
