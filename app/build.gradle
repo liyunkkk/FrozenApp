@@ -6,13 +6,13 @@ plugins {
 android {
     signingConfigs {
         debug {
-            storeFile file('D:\\project\\github\\freezeitapp\\freezeitapp_key.jks')
+            storeFile rootProject.file('freezeitapp_key.jks')
             storePassword 'freezeit'
             keyAlias 'freezeit'
             keyPassword 'freezeit'
         }
         release {
-            storeFile file('D:\\project\\github\\freezeitapp\\freezeitapp_key.jks')
+            storeFile rootProject.file('freezeitapp_key.jks')
             storePassword 'freezeit'
             keyAlias 'freezeit'
             keyPassword 'freezeit'
@@ -24,8 +24,8 @@ android {
         applicationId "io.github.MoWei.Frozen"
         minSdk 29
         targetSdk 34
-        versionCode 801000
-        versionName "8.1.0"
+        versionCode 801122
+        versionName "10.0"
 
         resValue "string", "versionName", "${versionName}"
         signingConfig signingConfigs.release
@@ -63,6 +63,7 @@ android {
 dependencies {
 
     compileOnly 'de.robv.android.xposed:api:82'
+    compileOnly 'io.github.libxposed:api:102.0.0'
 
     implementation(platform('org.jetbrains.kotlin:kotlin-bom:2.1.10'))
 

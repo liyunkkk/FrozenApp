@@ -26,7 +26,10 @@ public class Enum {
         public final static String ActivityManagerService = "com.android.server.am.ActivityManagerService";
         public final static String BatteryStatsService = "com.android.server.am.BatteryStatsService";
         public final static String ActiveUids = "com.android.server.am.ActiveUids";
+        // SDK x ~ 36: mCurProcState 位于 ProcessStateRecord, 由 ProcessRecord.mState 引用
         public final static String ProcessStateRecord = "com.android.server.am.ProcessStateRecord";
+        // SDK 37+ (Android 17): ProcessStateRecord 被移除, mCurProcState 上移至 ProcessRecord 的新基类
+        public final static String ProcessRecordInternal = "com.android.server.am.psc.ProcessRecordInternal";
         public final static String ProcessList = "com.android.server.am.ProcessList";
         public final static String ProcessErrorStateRecord = "com.android.server.am.ProcessErrorStateRecord";
         public final static String ActiveServices = "com.android.server.am.ActiveServices";
@@ -43,6 +46,7 @@ public class Enum {
         public final static String Dependencies = "com.android.server.NetworkManagementService$Dependencies";
         public final static String SystemServices = "com.android.server.NetworkManagementService$SystemServices";
         public final static String DisplayPowerController = "com.android.server.display.DisplayPowerController";
+        // SDK 34 ~ 36 存在; Android 17 (SDK 37) 起已移除, 仅保留 DisplayPowerController
         public final static String DisplayPowerController2 = "com.android.server.display.DisplayPowerController2"; //SDK 34+
         public final static String DisplayPowerState = "com.android.server.display.DisplayPowerState";
 

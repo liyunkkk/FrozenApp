@@ -14,9 +14,7 @@
     <string-array name="freeze_mode">
         <item>⚔️Terminate</item>
         <item>🧊SIGSTOP</item>
-        <item>🧊ST_BREAK</item>
         <item>❄️Freezer</item>
-        <item>❄️FRZ_BREAK</item>
         <item>🍀️Free</item>
     </string-array>
 

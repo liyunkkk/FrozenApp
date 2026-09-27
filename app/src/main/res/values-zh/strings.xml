@@ -10,13 +10,13 @@
     <string name="xposed_description">第三方安卓墓碑, 实现堪比IOS类似的完美墓碑机制</string>
 
 
-    <string name="coolapk_text">酷安 @MoWei 原作者:JARK006</string>
+    <string name="coolapk_text">GitHub @liyunkkk (情绪动物)</string>
     <string name="qq_group_text">QQ群组 697991010</string>
     <string name="qq_channel_text">QQ频道 Frozen模块</string>
 
     <string name="update_app_label">更新应用名称</string>
     <string name="about">关于</string>
-    <string name="developer">开发者 MoWei</string>
+    <string name="developer">开发者 情绪动物 (@liyunkkk)</string>
     <string name="xposed_warn">未激活,无法工作</string>
     <string name="freezeit_offline">Frozen未启用或工作异常</string>
     <string name="freezeit_error_tips">
@@ -106,6 +106,8 @@
 
     <string name="breakNetWork_title">全局断网 ⓘ</string>
     <string name="breakNetWork_tips">将冻结的应用进行断网操作,节省电量</string>
+    <string name="netUnfreeze_title">网络解冻 ⓘ</string>
+    <string name="netUnfreeze_tips">联动 Re:Kernel 内核网络唤醒广播。当冻结中的应用收到网络数据包时，内核触发主动临时解冻，保障即时消息与推送响应。</string>
 
     <string name="lmk_title">后台优化 ⓘ</string>
     <string name="lmk_tips">调整lmk参数，尽量保留更多应用后台(内存使用量会比较高)。重启生效</string>
@@ -148,7 +150,7 @@
     <string name="reject">拒绝</string>
     <string name="accept">接受</string>
     <string name="unknown">未知</string>
-    <string name="moduleEnv">模块环境</string>
+    <string name="moduleEnv">设备型号</string>
     <string name="moduleVer">Frozen版本</string>
     <string name="managerVer">管理器版本</string>
     <string name="kernel_version">内核版本</string>
@@ -161,4 +163,23 @@
     <string name="sys_warn_info">系统应用比较特殊，很多需要常驻后台，随时为系统提供各类服务。\n\n
         如果冻结，会引起很多系统异常现象，即使设为杀死后台，也会被系统不断重复拉起，这种反复拉锯会加速手机耗电。\n\n
         如果你不清楚你的行为会造成什么后果，则建议系统应用默认一律“🍀️自由后台”。</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="got_it">我知道了</string>
+
+    <string name="title_app_list">应用列表</string>
+    <string name="title_activity_config">应用冻结配置</string>
+    <string name="freeze_details">冻结详情</string>
+    <string name="search_hint">搜索应用名称或包名</string>
+    <string name="config_entry_title">应用冻结配置</string>
+    <string name="config_entry_desc">管理应用冻结模式与白名单规则</string>
+    <string name="freeze_state_v2">❄️ V2冻结中</string>
+    <string name="freeze_state_running">📱 运行中</string>
+    <string name="freeze_state_idle">未运行</string>
+    <string name="stat_procs_frozen">%1$d个进程 · %2$d个已冻结</string>
+    <string name="stat_mem">RSS %1$d MB</string>
+
+    <string name="stat_summary_format">%1$d个已冻结 · %2$d个运行中</string>
+    <string name="action_app_details">应用详情</string>
+    <string name="action_app_config">冻结配置</string>
 </resources>

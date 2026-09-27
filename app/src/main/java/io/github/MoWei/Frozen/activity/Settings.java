@@ -15,6 +15,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -40,9 +41,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch batterySwitch, currentSwitch,  doubleCellSwitch, BootFreezeSwitch, BinderFreezerSwitch,
-            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch, breakNetWorkSwitch,
-            lmkSwitch, dozeSwitch, debugSwitch;
-
+            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch,
+            netUnfreezeSwitch, lmkSwitch, dozeSwitch, debugSwitch;
     final int freezeTimeoutIdx = 2;
     final int wakeupTimeoutIdx = 3;
     final int terminateTimeoutIdx = 4;
@@ -61,6 +61,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
     final int lmkIdx = 22;
     final int dozeIdx = 23;
+    final int netUnfreezeIdx = 24;
 
     final int debugIdx = 30;
 
@@ -70,7 +71,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     int varIndexForHandle = 0;
     int newValueForHandle = 0;
 
-    ActivityResultLauncher<Intent> pickPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,17 +91,32 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.MemoryReclaim_title).setOnClickListener(this);
         findViewById(R.id.ClearBettryWhllelist_title).setOnClickListener(this);
         findViewById(R.id.unFreezerTemporar_title).setOnClickListener(this);
-
-        findViewById(R.id.breakNetWork_title).setOnClickListener(this);
+        if (findViewById(R.id.netUnfreeze_title) != null) {
+            findViewById(R.id.netUnfreeze_title).setOnClickListener(this);
+        }
         findViewById(R.id.lmk_title).setOnClickListener(this);
         findViewById(R.id.doze_title).setOnClickListener(this);
         findViewById(R.id.debug_title).setOnClickListener(this);
 
-        findViewById(R.id.set_bg).setOnClickListener(this);
 
         freezeModeSpinner = findViewById(R.id.freeze_mode_spinner);
         reFreezeTimeoutSpinner = findViewById(R.id.refreeze_timeout_spinner);
         wakeupTimeoutSpinner = findViewById(R.id.wakeup_timeout_spinner);
+
+        ArrayAdapter<CharSequence> workModeAdapter = ArrayAdapter.createFromResource(
+                this, R.array.work_mode, R.layout.item_spinner_selected);
+        workModeAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        freezeModeSpinner.setAdapter(workModeAdapter);
+
+        ArrayAdapter<CharSequence> refreezeAdapter = ArrayAdapter.createFromResource(
+                this, R.array.refreeze_timeout, R.layout.item_spinner_selected);
+        refreezeAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        reFreezeTimeoutSpinner.setAdapter(refreezeAdapter);
+
+        ArrayAdapter<CharSequence> wakeupAdapter = ArrayAdapter.createFromResource(
+                this, R.array.wakeup_timeout, R.layout.item_spinner_selected);
+        wakeupAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        wakeupTimeoutSpinner.setAdapter(wakeupAdapter);
 
         freezeTimeoutValueText = findViewById(R.id.freeze_timeout_value_text);
         terminateTimeoutValueText = findViewById(R.id.terminate_timeout_value_text);
@@ -117,7 +132,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         MemoryReclaimSwitch = findViewById(R.id.switch_MemoryReclaim);
         ClearBettryWhllelistSwitch = findViewById(R.id.switch_ClearBettryWhllelist);
         unFreezerTemporarSwitch = findViewById(R.id.switch_unFreezerTemporar);
-        breakNetWorkSwitch = findViewById(R.id.switch_breakNetWork);
+        netUnfreezeSwitch = findViewById(R.id.switch_netUnfreeze);
 
         lmkSwitch = findViewById(R.id.switch_lmk);
         dozeSwitch = findViewById(R.id.switch_doze);
@@ -129,46 +144,19 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
 
-        pickPicture = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() != RESULT_OK || result.getData() == null ||
-                    result.getData().getData() == null)
-                return;
-
-            try {
-                String imagePath = Utils.getFileAbsolutePath(this, result.getData().getData());
-                var bg = BitmapFactory.decodeFile(imagePath);
-                if (bg == null || bg.getHeight() == 0 || bg.getWidth() == 0) return;
-
-                // 居中截取 宽:高 = 1:2
-                if (bg.getHeight() > 2 * bg.getWidth())
-                    bg = Bitmap.createBitmap(bg, 0, bg.getHeight() / 2 - bg.getWidth(),
-                            bg.getWidth(), bg.getWidth() * 2);
-                else if (bg.getHeight() < 2 * bg.getWidth())
-                    bg = Bitmap.createBitmap(bg, bg.getWidth() / 2 - bg.getHeight() / 4, 0,
-                            bg.getHeight() / 2, bg.getHeight());
-
-                // 限制分辨率
-                if (bg.getWidth() > 1080)
-                    bg = Utils.resize(bg, 1080f / bg.getWidth());
-
-                bg.compress(Bitmap.CompressFormat.JPEG, 90,
-                        openFileOutput(StaticData.bgFileName, Context.MODE_PRIVATE));
-
-                StaticData.bg = new BitmapDrawable(getResources(), bg);
-                StaticData.bg.setAlpha(56);
-            } catch (Exception ignore) {
-            }
-        });
+        
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        findViewById(R.id.container).setBackground(StaticData.getBackgroundDrawable(this));
+        findViewById(R.id.container).setBackgroundResource(R.color.md_background);
         new Thread(() -> {
             var recvLen = Utils.freezeitTask(ManagerCmd.getSettings, null);
             if (recvLen != 256) {
-                Toast.makeText(getBaseContext(), getString(R.string.get_settings_fail), Toast.LENGTH_LONG).show();
+                // 修复: 后台线程无 Looper, 切主线程 Toast, 否则 RuntimeException 闪退
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(getBaseContext(), getString(R.string.get_settings_fail), Toast.LENGTH_LONG).show());
                 return;
             }
             System.arraycopy(StaticData.response, 0, settingsVar, 0, 256);
@@ -306,7 +294,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     InitSwitch(MemoryReclaimSwitch, MemoryReclaimIdx);
                     InitSwitch(ClearBettryWhllelistSwitch, ClearBettryWhllelistIdx);
                     InitSwitch(unFreezerTemporarSwitch, unFreezerTemporarIdx);
-                    InitSwitch(breakNetWorkSwitch, breakNetWorkIdx);
+                    if (netUnfreezeSwitch != null) {
+                        InitSwitch(netUnfreezeSwitch, netUnfreezeIdx);
+                    }
 
                     InitSwitch(lmkSwitch, lmkIdx);
                     InitSwitch(dozeSwitch, dozeIdx);
@@ -353,21 +343,14 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Utils.textDialog(this, R.string.ClearBettryWhllelist_title, R.string.ClearBettryWhllelist_tips);
         } else if (id == R.id.unFreezerTemporar_title) {
             Utils.textDialog(this, R.string.unFreezerTemporary_title, R.string.unFreezerTemporary_tips);
-        } else if (id == R.id.breakNetWork_title) {
-            Utils.textDialog(this, R.string.breakNetWork_title, R.string.breakNetWork_tips);
-
-
-
+        } else if (id == R.id.netUnfreeze_title) {
+            Utils.textDialog(this, R.string.netUnfreeze_title, R.string.netUnfreeze_tips);
         } else if (id == R.id.lmk_title) {
             Utils.textDialog(this, R.string.lmk_title, R.string.lmk_tips);
         } else if (id == R.id.doze_title) {
             Utils.textDialog(this, R.string.doze_title, R.string.doze_tips);
         } else if (id == R.id.debug_title) {
             Utils.textDialog(this, R.string.debug_title, R.string.debug_tips);
-        } else if (id == R.id.set_bg) {
-            Intent intent = new Intent("android.intent.action.GET_CONTENT");
-            intent.setType("image/*");
-            pickPicture.launch(intent);
         }
     }
 }

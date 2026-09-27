@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:orientation="horizontal">
+    android:layout_height="112dp"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginVertical="4dp"
+    android:background="@drawable/bg_app_item"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="10dp">
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="center_vertical"
         android:contentDescription="@string/icon"
-        android:padding="10dp" />
+        android:padding="2dp" />
 
-    <TextView
-        android:id="@+id/app_label"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="11dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spinner_level"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        android:entries="@array/level"
-        android:gravity="center"
-        android:spinnerMode="dropdown" />
+        <TextView
+            android:id="@+id/app_label"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/md_on_surface"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinner_cfg"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        android:entries="@array/freeze_mode"
-        android:gravity="center"
-        android:spinnerMode="dropdown" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <Spinner
+                android:id="@+id/spinner_level"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="0.82"
+                android:background="@drawable/bg_spinner_pill"
+                android:dropDownVerticalOffset="6dp"
+                android:gravity="center"
+                android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spinner_cfg"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="7dp"
+                android:layout_weight="1.18"
+                android:background="@drawable/bg_spinner_pill"
+                android:dropDownVerticalOffset="6dp"
+                android:gravity="center"
+                android:popupBackground="@drawable/bg_spinner_dropdown_liquid"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

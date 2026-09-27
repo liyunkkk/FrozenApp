@@ -6,8 +6,8 @@
     <string name="coolapk_link" translatable="false">http://www.coolapk.com/u/24268987</string>
     <string name="qq_group_link" translatable="false">https://jq.qq.com/?_wv=1027&amp;k=ZsyKpCP8</string>
     <string name="qq_channel_link" translatable="false">https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;appChannel=share&amp;inviteCode=1W6opB7&amp;appChannel=share&amp;businessType=9&amp;from=246610&amp;biz=ka</string>
-    <string name="github_link" translatable="false">https://github.com/jark006</string>
-    <string name="github_project_link" translatable="false">https://github.com/jark006/freezeitVS</string>
+    <string name="github_link" translatable="false">https://github.com/liyunkkk/FrozenApp</string>
+    <string name="github_project_link" translatable="false">https://github.com/liyunkkk/FrozenApp/freezeitVS</string>
 
 
     <string name="privacy_content" translatable="false">
@@ -46,7 +46,7 @@
     <string name="title_config">Config</string>
     <string name="title_logcat">Log</string>
     <string name="icon">Icon</string>
-    <string name="coolapk_text">Coolapk @MoWei</string>
+    <string name="coolapk_text">GitHub @liyunkkk (情绪动物)</string>
     <string name="qq_group_text">QQ Group 697991010</string>
     <string name="qq_channel_text">QQ Channel [Frozen模块]</string>
     <string name="update_app_label">Update Apps</string>
@@ -110,8 +110,10 @@
     <string name="breakNetWork_tips">
         Disconnect the network of frozen apps to save battery
     </string>
+    <string name="netUnfreeze_title">Network Unfreeze ⓘ</string>
+    <string name="netUnfreeze_tips">Collaborates with Re:Kernel network wakeup broadcast to temporarily unfreeze apps on incoming packets.</string>
 
-    <string name="developer">Developer MoWei Original Developer: JARK006</string>
+    <string name="developer">Developer 情绪动物 (@liyunkkk)</string>
     <string name="physical_ram_text">[RAM] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="virtual_ram_text">[SWAP] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="ext_memory">ExtMemory: %1$.2f GiB</string>
@@ -187,4 +189,23 @@
     <string name="sys_warn_info">System applications are quite special, and many of them need to reside in the background to provide various services to the system at any time. \n\n
          If it is frozen, it will cause many system abnormalities. Even if it is set to terminate, it will be repeatedly pulled up by the system. This repeated sawing will accelerate the power consumption of the mobile phone. \n\n
          If you don\'t know what the consequences of your actions will be, it is recommended that system applications default to 🍀️Free.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="got_it">Got it</string>
+
+    <string name="title_app_list">Apps</string>
+    <string name="title_activity_config">App Freeze Config</string>
+    <string name="freeze_details">Freeze Details</string>
+    <string name="search_hint">Search name or package</string>
+    <string name="config_entry_title">App Freeze Config</string>
+    <string name="config_entry_desc">Manage freeze modes &amp; whitelist</string>
+    <string name="freeze_state_v2">❄️ V2 Frozen</string>
+    <string name="freeze_state_running">📱 Running</string>
+    <string name="freeze_state_idle">Idle</string>
+    <string name="stat_procs_frozen">%1$d procs · %2$d frozen</string>
+    <string name="stat_mem">RSS %1$d MB</string>
+
+    <string name="stat_summary_format">%1$d frozen · %2$d running</string>
+    <string name="action_app_details">App Info</string>
+    <string name="action_app_config">Freeze Config</string>
 </resources>

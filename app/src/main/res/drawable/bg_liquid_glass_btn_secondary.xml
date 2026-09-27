@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/liquid_glass_btn_secondary_bg" />
+            <stroke android:width="1dp" android:color="@color/liquid_glass_stroke_secondary" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+</ripple>

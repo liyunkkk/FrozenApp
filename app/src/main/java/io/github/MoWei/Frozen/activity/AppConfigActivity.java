@@ -1,4 +1,4 @@
-package io.github.MoWei.Frozen.fragment;
+package io.github.MoWei.Frozen.activity;
 
 import static io.github.MoWei.Frozen.Utils.CFG_FREEZER;
 import static io.github.MoWei.Frozen.Utils.CFG_FREEZER_BR;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,15 +22,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,30 +45,35 @@ import io.github.MoWei.Frozen.ManagerCmd;
 import io.github.MoWei.Frozen.R;
 import io.github.MoWei.Frozen.StaticData;
 import io.github.MoWei.Frozen.Utils;
-import io.github.MoWei.Frozen.databinding.FragmentConfigBinding;
+import io.github.MoWei.Frozen.databinding.ActivityAppConfigBinding;
 
-public class Config extends Fragment {
-    private final static String TAG = "ConfigFragment";
+public class AppConfigActivity extends AppCompatActivity {
+    private final static String TAG = "AppConfigActivity";
     final int GET_APP_CFG = 1,
             SET_CFG_SUCCESS = 2,
             SET_CFG_FAIL = 3;
 
-    private FragmentConfigBinding binding;
+    private ActivityAppConfigBinding binding;
     AppCfgAdapter recycleAdapter = new AppCfgAdapter();
     long lastTimestamp = 0;
-
 
     // 配置名单 <uid, <freezeMode, isPermissive>>
     // freezeMode: [10]:杀死 [20]:SIGSTOP [21]:SIGSTOP断网 [30]:Freezer [31]:Freezer断网 [40]:自由 [50]:内置
     HashMap<Integer, Pair<Integer, Integer>> appCfg = new HashMap<>();
     ArrayList<Integer> uidListSort = new ArrayList<>();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityAppConfigBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        binding = FragmentConfigBinding.inflate(inflater, container, false);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_activity_config);
+        }
 
-        binding.recyclerviewApp.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerviewApp.setLayoutManager(new LinearLayoutManager(this));
         var animator = new DefaultItemAnimator();
         animator.setSupportsChangeAnimations(false);
         binding.recyclerviewApp.setItemAnimator(animator);
@@ -76,51 +81,61 @@ public class Config extends Fragment {
         binding.recyclerviewApp.setHasFixedSize(true);
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> new Thread(() -> {
-            AppInfoCache.refreshCache(requireContext());// 下拉刷新时，先更新应用缓存
+            AppInfoCache.refreshCache(this); // 下拉刷新时，先更新应用缓存
             getAppCfgTask();
         }).start());
 
-        recycleAdapter.setContext(requireContext());
+        recycleAdapter.setContext(this);
 
-        requireActivity().addMenuProvider(new MenuProvider() {
+        this.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.clear();
                 menuInflater.inflate(R.menu.config_menu, menu);
-                SearchView searchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
-                if (searchView == null) {
-                    Log.e(TAG, "onCreateMenu: searchView == null");
-                    return;
+                MenuItem searchItem = menu.findItem(R.id.search_view);
+                if (searchItem != null) {
+                    SearchView searchView = (SearchView) searchItem.getActionView();
+                    if (searchView != null) {
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                recycleAdapter.filter(newText != null ? newText.toLowerCase(Locale.ENGLISH) : "");
+                                return true;
+                            }
+                        });
+
+                        String kw = getIntent().getStringExtra("search_keyword");
+                        if (kw != null && !kw.isEmpty()) {
+                            searchItem.expandActionView();
+                            searchView.setQuery(kw, true);
+                        }
+                    }
                 }
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {//按下搜索触发
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        recycleAdapter.filter(newText != null ? newText.toLowerCase(Locale.ENGLISH) : "");
-                        return true;
-                    }
-                });
-
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                if (id == R.id.help_config) {
-                    Utils.layoutDialog(requireContext(), R.layout.help_dialog_config);
+                if (id == android.R.id.home) {
+                    finish();
+                    return true;
+                } else if (id == R.id.help_config) {
+                    Utils.layoutDialog(AppConfigActivity.this, R.layout.help_dialog_config);
+                    return true;
                 }
-                return true;
+                return false;
             }
-        }, this.getViewLifecycleOwner());
+        }, this);
 
         binding.fabSave.setOnClickListener(view -> {
             var now = System.currentTimeMillis();
             if ((now - lastTimestamp) < 1000) {
-                Toast.makeText(requireContext(), getString(R.string.slowly_tips), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.slowly_tips), Toast.LENGTH_LONG).show();
                 return;
             }
             lastTimestamp = now;
@@ -139,21 +154,17 @@ public class Config extends Fragment {
         binding.fabSwitchSys.setOnClickListener(view -> {
             var now = System.currentTimeMillis();
             if ((now - lastTimestamp) < 500) {
-                Toast.makeText(requireContext(), getString(R.string.slowly_tips), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.slowly_tips), Toast.LENGTH_LONG).show();
                 return;
             }
             lastTimestamp = now;
-
             recycleAdapter.switchAppType();
         });
-
-        return binding.getRoot();
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-
         binding.swipeRefreshLayout.setRefreshing(true);
         new Thread(this::getAppCfgTask).start();
     }
@@ -162,10 +173,9 @@ public class Config extends Fragment {
         var recvLen = Utils.freezeitTask(ManagerCmd.getAppCfg, null);
         if (recvLen == 0 || recvLen % 12 != 0) {
             if (binding != null)
-                binding.swipeRefreshLayout.setRefreshing(false);
+                runOnUiThread(() -> binding.swipeRefreshLayout.setRefreshing(false));
             return;
         }
-
         appCfg.clear();
         // 每个配置含：3个[int32]数据，12字节 小端
         for (int i = 0; i < recvLen; i += 12) {
@@ -177,11 +187,12 @@ public class Config extends Fragment {
         }
 
         var uidList = AppInfoCache.getUidList();
-        // 补全  此时 uidList 可能包含一些刚刚安装的应用，而底层还没更新全部应用列表
+        // 补全 此时 uidList 可能包含一些刚刚安装的应用，而底层还没更新全部应用列表
         uidList.forEach(uid -> {
             if (!appCfg.containsKey(uid))
                 appCfg.put(uid, new Pair<>(Utils.CFG_FREEZER, 1)); // 默认Freezer 宽松
         });
+
         // 检查非法配置
         appCfg.forEach((uid, cfg) -> {
             if (!Utils.CFG_SET.contains(cfg.first))
@@ -189,7 +200,6 @@ public class Config extends Fragment {
         });
 
         uidListSort.clear();
-
         // 先排 自由
         for (int uid : uidList) {
             var mode = appCfg.get(uid);
@@ -210,7 +220,6 @@ public class Config extends Fragment {
                     && mode.second == 0)
                 uidListSort.add(uid);
         }
-
         for (int uid : uidList) {
             var mode = appCfg.get(uid);
             if (mode != null && (mode.first == CFG_SIGSTOP || mode.first == Utils.CFG_SIGSTOP_BR)
@@ -223,7 +232,6 @@ public class Config extends Fragment {
                     && mode.second == 0)
                 uidListSort.add(uid);
         }
-
         for (int uid : uidList) {
             var mode = appCfg.get(uid);
             if (mode != null && mode.first == Utils.CFG_TERMINATE && mode.second != 0)
@@ -234,7 +242,6 @@ public class Config extends Fragment {
             if (mode != null && mode.first == Utils.CFG_TERMINATE && mode.second == 0)
                 uidListSort.add(uid);
         }
-
         // 最后排 内置自由
         for (int uid : uidList) {
             var mode = appCfg.get(uid);
@@ -252,28 +259,26 @@ public class Config extends Fragment {
             super.handleMessage(msg);
             if (binding == null)
                 return;
-
             switch (msg.what) {
                 case GET_APP_CFG:
                     recycleAdapter.updateDataSet(uidListSort, appCfg);
                     binding.swipeRefreshLayout.setRefreshing(false);
                     break;
                 case SET_CFG_SUCCESS:
-                    Toast.makeText(requireContext(), R.string.update_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppConfigActivity.this, R.string.update_success, Toast.LENGTH_SHORT).show();
                     break;
                 case SET_CFG_FAIL:
-                    Toast.makeText(requireContext(), R.string.update_fail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppConfigActivity.this, R.string.update_fail, Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     };
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    protected void onDestroy() {
+        super.onDestroy();
         binding = null;
     }
-
 
     static class AppCfgAdapter extends RecyclerView.Adapter<AppCfgAdapter.MyViewHolder> {
         ArrayList<Integer> uidList = new ArrayList<>();
@@ -286,7 +291,7 @@ public class Config extends Fragment {
         public AppCfgAdapter() {
         }
 
-        public void setContext(Context ctx){
+        public void setContext(Context ctx) {
             context = ctx;
         }
 
@@ -312,16 +317,14 @@ public class Config extends Fragment {
                 case CFG_TERMINATE:
                     return 0;
                 case CFG_SIGSTOP:
-                    return 1;
                 case CFG_SIGSTOP_BR:
-                    return 2;
+                    return 1;
                 default:
                 case CFG_FREEZER:
-                    return 3;
                 case CFG_FREEZER_BR:
-                    return 4;
+                    return 2;
                 case CFG_WHITELIST:
-                    return 5;
+                    return 3;
             }
         }
 
@@ -331,14 +334,10 @@ public class Config extends Fragment {
                     return CFG_TERMINATE;
                 case 1:
                     return CFG_SIGSTOP;
-                case 2:
-                    return CFG_SIGSTOP_BR;
                 default:
-                case 3:
+                case 2:
                     return CFG_FREEZER;
-                case 4:
-                    return CFG_FREEZER_BR;
-                case 5:
+                case 3:
                     return CFG_WHITELIST;
             }
         }
@@ -347,7 +346,6 @@ public class Config extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             int uid = uidListFilter.get(position);
-
             if (holder.uid != uid) {
                 holder.uid = uid;
                 var info = AppInfoCache.get(uid);
@@ -358,7 +356,6 @@ public class Config extends Fragment {
                     holder.app_label.setText(String.valueOf(uid));
                 }
             }
-
             var cfg = appCfg.get(uid);
             int freezeMode = cfg == null ? CFG_FREEZER : cfg.first;
             int isPermissive = cfg == null ? 0 : cfg.second;
@@ -368,10 +365,8 @@ public class Config extends Fragment {
                 holder.spinner_cfg.setVisibility(View.GONE);
                 return;
             }
-
             holder.spinner_cfg.setVisibility(View.VISIBLE);
             holder.spinner_permissive.setVisibility(freezeMode == CFG_WHITELIST ? View.GONE : View.VISIBLE);
-
             holder.spinner_cfg.setSelection(cfgValue2idx(freezeMode));
             holder.spinner_permissive.setSelection(isPermissive == 0 ? 0 : 1);
         }
@@ -382,7 +377,6 @@ public class Config extends Fragment {
         }
 
         static class MyViewHolder extends RecyclerView.ViewHolder {
-
             ImageView app_icon;
             TextView app_label;
             Spinner spinner_cfg, spinner_permissive;
@@ -394,6 +388,16 @@ public class Config extends Fragment {
                 app_label = view.findViewById(R.id.app_label);
                 spinner_cfg = view.findViewById(R.id.spinner_cfg);
                 spinner_permissive = view.findViewById(R.id.spinner_level);
+
+                ArrayAdapter<CharSequence> levelAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(), R.array.level, R.layout.item_spinner_selected);
+                levelAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinner_permissive.setAdapter(levelAdapter);
+
+                ArrayAdapter<CharSequence> cfgAdapter = ArrayAdapter.createFromResource(
+                        view.getContext(), R.array.freeze_mode, R.layout.item_spinner_selected);
+                cfgAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinner_cfg.setAdapter(cfgAdapter);
 
                 spinner_cfg.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -425,14 +429,10 @@ public class Config extends Fragment {
                     }
                 });
             }
-
         }
 
-
         public byte[] getCfgBytes() {
-
             if (appCfg.isEmpty()) return null;
-
             byte[] tmp = new byte[appCfg.size() * 12];
             final int[] idx = {0};
             appCfg.forEach((uid, cfg) -> {
@@ -449,7 +449,7 @@ public class Config extends Fragment {
         public void switchAppType() {
             showSystemApp = !showSystemApp;
             updateAndRefreshView();
-            if(showSystemApp)
+            if (showSystemApp)
                 Utils.textDialog(context, R.string.sys_warn_title, R.string.sys_warn_info);
         }
 
@@ -462,12 +462,12 @@ public class Config extends Fragment {
         void updateAndRefreshView() {
             uidListFilter.clear();
             for (int uid : uidList) {
-                if (AppInfoCache.get(uid).isSystemApp == showSystemApp &&
-                        (keyWord.isEmpty() || AppInfoCache.get(uid).contains(keyWord)))
+                var item = AppInfoCache.get(uid);
+                if (item != null && item.isSystemApp == showSystemApp &&
+                        (keyWord.isEmpty() || item.contains(keyWord)))
                     uidListFilter.add(uid);
             }
             notifyDataSetChanged();
         }
     }
-
 }

@@ -28,22 +28,14 @@ public class About extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        findViewById(R.id.container).setBackground(StaticData.getBackgroundDrawable(this));
+        findViewById(R.id.container).setBackgroundResource(R.color.md_background);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.coolapk_link) {
-            try {
-                Intent intent = new Intent();
-                intent.setClassName("com.coolapk.market", "com.coolapk.market.view.AppLinkActivity");
-                intent.setAction("android.intent.action.VIEW");
-                intent.setData(Uri.parse("coolmarket://u/24268987"));
-                startActivity(intent);
-            } catch (Exception e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.coolapk_link))));
-            }
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/liyunkkk")));
         } else if (id == R.id.github_link) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_link))));
         } else if (id == R.id.privacy_text) {

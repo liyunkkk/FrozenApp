@@ -1,4 +1,12 @@
 package io.github.MoWei.Frozen.fragment;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -32,12 +40,15 @@ import io.github.MoWei.Frozen.R;
 import io.github.MoWei.Frozen.StaticData;
 import io.github.MoWei.Frozen.Utils;
 import io.github.MoWei.Frozen.activity.About;
+import io.github.MoWei.Frozen.activity.AppConfigActivity;
 import io.github.MoWei.Frozen.activity.AppTime;
 import io.github.MoWei.Frozen.activity.Settings;
 import io.github.MoWei.Frozen.databinding.FragmentHomeBinding;
 
 public class Home extends Fragment implements View.OnClickListener {
     private final static String TAG = "HomeFragment";
+    private ActivityResultLauncher<Intent> pickBannerLauncher;
+    private static final String BANNER_FILE = "banner_bg.jpg";
     private FragmentHomeBinding binding;
 
     Timer timer;
@@ -52,8 +63,63 @@ public class Home extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-
         binding.realtimeLayout.setOnClickListener(this);
+        pickBannerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getData() != null) {
+                        try {
+                            Uri uri = result.getData().getData();
+                            Context ctx = getContext();
+                            if (ctx == null) return;
+                            String path = Utils.getFileAbsolutePath(ctx, uri);
+                            Bitmap bmp = BitmapFactory.decodeFile(path);
+                            if (bmp != null && bmp.getWidth() > 0 && bmp.getHeight() > 0) {
+                                if (bmp.getWidth() > 1080) {
+                                    bmp = Utils.resize(bmp, 1080f / bmp.getWidth());
+                                }
+                                File f = new File(ctx.getFilesDir(), BANNER_FILE);
+                                FileOutputStream fos = new FileOutputStream(f);
+                                bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                                fos.flush();
+                                fos.close();
+                                loadBannerBackground();
+                                Toast.makeText(ctx, "横幅壁纸已更新", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Failed to set banner image", e);
+                        }
+                    }
+                }
+        );
+        loadBannerBackground();
+        binding.cardHeroBanner.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            pickBannerLauncher.launch(intent);
+        });
+        binding.cardHeroBanner.setOnLongClickListener(v -> {
+            Context ctx = getContext();
+            if (ctx != null) {
+                File f = new File(ctx.getFilesDir(), BANNER_FILE);
+                if (f.exists()) {
+                    f.delete();
+                }
+                loadBannerBackground();
+                Toast.makeText(ctx, "已恢复默认横幅", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
+        binding.stateLayout.setOnClickListener(v -> {
+            if (!StaticData.hasGetPropInfo) {
+                binding.swipeRefreshLayout.setRefreshing(true);
+                refreshStatus();
+            }
+        });
+        binding.cardAppConfigEntry.setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), AppConfigActivity.class));
+        });
 
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
@@ -102,8 +168,30 @@ public class Home extends Fragment implements View.OnClickListener {
         refreshStatus();
     }
 
+
+    private void loadBannerBackground() {
+        if (binding == null) return;
+        Context ctx = getContext();
+        if (ctx == null) return;
+        File f = new File(ctx.getFilesDir(), BANNER_FILE);
+        if (f.exists() && f.length() > 0) {
+            Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+            if (bmp != null) {
+                binding.bannerBackground.setImageBitmap(bmp);
+                return;
+            }
+        }
+        binding.bannerBackground.setImageResource(R.drawable.bg_icon_glow);
+    }
     @Override
     public void onDestroyView() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        StaticData.imgWidth = 0;
+        StaticData.imgHeight = 0;
+        StaticData.bitmap = null;
         super.onDestroyView();
         binding = null;
     }
@@ -184,6 +272,7 @@ public class Home extends Fragment implements View.OnClickListener {
                     binding.realtimeLayout.setVisibility(View.GONE);
                     binding.freezeitLogo.setVisibility(View.GONE);
                     binding.versionCard.setVisibility(View.GONE);
+                    binding.cardAppConfigEntry.setVisibility(View.GONE);
 
                 }
                 break;
@@ -194,9 +283,11 @@ public class Home extends Fragment implements View.OnClickListener {
                     binding.freezeitLogo.setVisibility(View.VISIBLE);
                     binding.realtimeLayout.setVisibility(View.VISIBLE);
                     binding.versionCard.setVisibility(View.VISIBLE);
+                    binding.cardAppConfigEntry.setVisibility(View.VISIBLE);
 
                     boolean xposedState = isXposedActive();
-                    binding.stateLayout.setBackgroundResource(xposedState ? R.color.normal_green : R.color.warn_orange);
+                    // 胶囊状态背景保持半透明优雅质感
+                    binding.stateLayout.setBackgroundResource(R.drawable.bg_status_pill);
                     binding.statusText.setText(xposedState ? StaticData.workMode : "Xposed " + getString(R.string.xposed_warn));
 
                     binding.moduleEnv.setText(StaticData.moduleEnv);

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Lumi_Books Style Liquid Glass (Night): 1. 黑曜石微透折射基底 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#68252830"
+                android:endColor="#4C14161B"
+                android:type="linear" />
+            <corners android:radius="32dp" />
+        </shape>
+    </item>
+    <!-- Lumi_Books Style Liquid Glass (Night): 2. 月光冷白微反光穹顶折射 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#45FFFFFF"
+                android:centerColor="#14FFFFFF"
+                android:endColor="#02FFFFFF"
+                android:type="linear" />
+            <corners android:radius="32dp" />
+        </shape>
+    </item>
+    <!-- Lumi_Books Style Liquid Glass (Night): 3. 暗夜微光高光描边棱线 -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="1.25dp"
+                android:color="#80FFFFFF" />
+            <corners android:radius="32dp" />
+        </shape>
+    </item>
+</layer-list>
