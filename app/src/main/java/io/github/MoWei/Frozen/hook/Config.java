@@ -19,6 +19,8 @@ public class Config {
     public int[] settings = new int[256];
     public BucketSet managedApp = new BucketSet();// 受Frozen管控的应用 只含冻结配置和杀死后台 不含自由后台
     public BucketSet permissive = new BucketSet();  // 宽松前台
+    public final java.util.ArrayList<Integer> permissiveList = new java.util.ArrayList<>(); // 同上，可遍历
+    public VectorSet networkActiveUid = new VectorSet(64); // 网速超过阈值的宽松应用（照 Cirno 的 NETWORK_SPEED 豁免）
     public VectorSet foregroundUid = new VectorSet(64); // 当前在前台(含宽松前台) 底层进程问询时才刷新
     public VectorSet pendingUid = new VectorSet(64);    // 切到后台暂未冻结的应用
     public HashMap<String, Integer> uidIndex = new HashMap<>(512); // UID索引

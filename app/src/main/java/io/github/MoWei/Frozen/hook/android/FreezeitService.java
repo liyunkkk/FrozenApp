@@ -48,6 +48,17 @@ public class FreezeitService {
     Object mNetdService;
     Class<?> UidRangeParcelClazz;
 
+    // ===== 网速监控（照 Cirno 的 NetworkSpeedMonitor / FreezeExemption.NETWORK_SPEED）=====
+    // 数据源：netstats 服务的 readNetworkStatsUidDetail(uid, null, -1)，返回该 uid 的
+    // 全部 NetworkStats 条目，累加 rxBytes/txBytes 得到权威累计流量。
+    // 比 native 侧读 netd 的 BPF map 可靠：不受 SELinux 限制，TUN/代理下也是应用自身 socket 口径。
+    final static int NET_SPEED_THRESHOLD = 102400;   // 100 KiB/s，与 Cirno 默认值一致
+    final static String NET_TAG = "[NetSpeed]";
+    Object netStatsBinder;
+    Method readNetworkStatsUidDetailMethod;
+    final java.util.HashMap<Integer, long[]> netSnapshots = new java.util.HashMap<>();
+    volatile boolean netStatsUnavailable = false;
+
     LocalSocketServer serverThread = new LocalSocketServer();
 
     ClassLoader classLoader;
@@ -62,6 +73,9 @@ public class FreezeitService {
         // "handlePendingIntent() 工作异常, 请确认LSPosed中Frozen是否已经勾选系统框架"，
         // 且前台列表/后台意图全部拿不到，冻结功能整体停摆。
         serverThread.start();
+
+        // 网速监控：宽松应用只要还在下载（网速 ≥ 100 KiB/s）就不允许冻结
+        serverThread.startNetworkSpeedMonitor();
 
         // A10-13 ActivityManagerService
         // https://cs.android.com/android/platform/superproject/main/+/main:frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java
@@ -160,6 +174,7 @@ public class FreezeitService {
         final int UPDATE_PENDING = baseCode + 60;   // 更新待冻结应用
         final int GET_AUDIO = baseCode + 81; // 获取正在播放音频的APP
         final int GET_INTENT = baseCode + 91; // 后台意图
+        final int GET_NETWORK_ACTIVE = baseCode + 100; // 网速活跃的宽松应用 uid 列表
 
         // 有效命令集
         final Set<Integer> requestCodeSet = Set.of(
@@ -171,7 +186,8 @@ public class FreezeitService {
                 BREAK_NETWORK,
                 UPDATE_PENDING,
                 GET_AUDIO,
-                GET_INTENT
+                GET_INTENT,
+                GET_NETWORK_ACTIVE
         );
 
         byte[] buff = new byte[128 * 1024];// 128 KiB
@@ -282,12 +298,119 @@ public class FreezeitService {
                     case GET_INTENT:
                         handleGetIntentApps(os, buff);
                         break;
+                    case GET_NETWORK_ACTIVE:
+                        handleNetworkActive(os, replyBuff);
+                        break;
                     default:
                         log(TAG, "请求码功能暂未实现TODO: " + requestCode);
                         break;
                 }
                 client.close();
             }
+        }
+
+        // ===== 网速监控（照 Cirno 的 NetworkSpeedMonitor）=====
+        // 只轮询宽松应用（permissiveList），每秒一次；网速 ≥ NET_SPEED_THRESHOLD 的 uid
+        // 写进 config.networkActiveUid，native 侧通过 GET_NETWORK_ACTIVE 拉取后放行。
+        void startNetworkSpeedMonitor() {
+            Thread t = new Thread(() -> {
+                while (true) {
+                    try {
+                        pollNetworkSpeed();
+                    } catch (Throwable e) {
+                        log(NET_TAG, "轮询异常: " + e);
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            }, "FrozenNetSpeed");
+            t.setDaemon(true);
+            t.start();
+            log(NET_TAG, "网速监控已启动 阈值=" + NET_SPEED_THRESHOLD + "B/s");
+        }
+
+        void pollNetworkSpeed() {
+            if (netStatsUnavailable) return;
+
+            if (netStatsBinder == null) {
+                try {
+                    Class<?> sm = Class.forName("android.os.ServiceManager");
+                    Method getService = sm.getDeclaredMethod("getService", String.class);
+                    netStatsBinder = getService.invoke(null, "netstats");
+                } catch (Throwable e) {
+                    netStatsUnavailable = true;
+                    log(NET_TAG, "取 netstats 服务失败: " + e);
+                    return;
+                }
+                if (netStatsBinder == null) {
+                    netStatsUnavailable = true;
+                    log(NET_TAG, "netstats 服务不存在");
+                    return;
+                }
+                log(NET_TAG, "netstats 已连接");
+            }
+
+            if (readNetworkStatsUidDetailMethod == null) {
+                try {
+                    readNetworkStatsUidDetailMethod = netStatsBinder.getClass()
+                            .getDeclaredMethod("readNetworkStatsUidDetail",
+                                    int.class, String[].class, int.class);
+                    readNetworkStatsUidDetailMethod.setAccessible(true);
+                } catch (Throwable e) {
+                    netStatsUnavailable = true;
+                    log(NET_TAG, "找不到 readNetworkStatsUidDetail: " + e);
+                    return;
+                }
+            }
+
+            if (config.permissiveList.isEmpty()) return;
+
+            final long now = System.currentTimeMillis();
+            config.networkActiveUid.clear();
+
+            for (int i = 0; i < config.permissiveList.size(); i++) {
+                final int uid = config.permissiveList.get(i);
+                try {
+                    Object stats = readNetworkStatsUidDetailMethod.invoke(netStatsBinder, uid, null, -1);
+                    if (stats == null) continue;
+
+                    long rx = 0, tx = 0;
+                    final int size = (int) XposedHelpers.callMethod(stats, "size");
+                    Object entry = null;
+                    for (int k = 0; k < size; k++) {
+                        entry = XposedHelpers.callMethod(stats, "getValues", k, entry);
+                        if (entry == null) break;
+                        rx += (long) XposedHelpers.getObjectField(entry, "rxBytes");
+                        tx += (long) XposedHelpers.getObjectField(entry, "txBytes");
+                    }
+
+                    final long[] prev = netSnapshots.get(uid);
+                    netSnapshots.put(uid, new long[]{rx, tx, now});
+                    if (prev == null) continue;
+
+                    final long dt = now - prev[2];
+                    if (dt <= 0) continue;
+
+                    long speed = ((rx - prev[0]) + (tx - prev[1])) * 1000L / dt;
+                    if (speed < 0) speed = 0;
+
+                    if (speed >= NET_SPEED_THRESHOLD)
+                        config.networkActiveUid.add(uid);
+                } catch (Throwable ignored) {
+                    // 单个 uid 读取失败不影响其它应用
+                }
+            }
+        }
+
+        void handleNetworkActive(OutputStream os, byte[] replyBuff) throws IOException {
+            // 与 handleForeground 同格式: [count][uid1][uid2]...
+            final int n = config.networkActiveUid.size();
+            Utils.Int2Byte(n, replyBuff, 0);
+            config.networkActiveUid.toBytes(replyBuff, 4);
+            os.write(replyBuff, 0, (n + 1) * 4);
+            os.close();
         }
 
         void handleForeground(OutputStream os, byte[] replyBuff) throws IOException {
@@ -392,6 +515,7 @@ public class FreezeitService {
             config.uidIndex.clear();
             config.pkgIndex.clear();
             config.permissive.clear();
+            config.permissiveList.clear();
 
             try {
                 StringBuilder tmp = new StringBuilder("Parse:");
@@ -420,8 +544,15 @@ public class FreezeitService {
 
                 if (splitLine.length == 3) {
                     elementList = splitLine[2].split(" ");
-                    for (String uidStr : elementList)
-                        config.permissive.add(Integer.parseInt(uidStr));
+                    for (String uidStr : elementList) {
+                        if (uidStr.isEmpty()) continue;
+                        try {
+                            final int u = Integer.parseInt(uidStr);
+                            config.permissive.add(u);
+                            config.permissiveList.add(u);
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
                 }
                 tmp.append(" permissive:").append(config.permissive.size());
 
