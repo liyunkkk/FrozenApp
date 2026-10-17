@@ -299,7 +299,7 @@ public class FreezeitService {
                         handleGetIntentApps(os, buff);
                         break;
                     case GET_NETWORK_ACTIVE:
-                        handleNetworkActive(os, replyBuff);
+                        handleNetworkActive(os, buff);
                         break;
                     default:
                         log(TAG, "请求码功能暂未实现TODO: " + requestCode);
