@@ -292,10 +292,20 @@ public class FreezeitService {
 
         void handleForeground(OutputStream os, byte[] replyBuff) throws IOException {
             config.foregroundUid.clear();
+
+            final int lruSize = (mLruProcesses == null) ? 0 : mLruProcesses.size();
+            if (lruSize == 0 || !config.isCurProcStateInitialized()) {
+                // 拿不到 LRU 时必须留痕，否则 native 侧只会看到"前台为空"然后照冻不误
+                log(FGD_TAG, "前台列表不可用 lruSize=" + lruSize
+                        + " procStateInit=" + config.isCurProcStateInitialized());
+            }
+
             try {
-                for (int i = (mLruProcesses == null || !config.isCurProcStateInitialized()) ?
-                        0 : mLruProcesses.size() - 1; i > 10; i--) { //逆序, 最近活跃应用在最后
-                    var processRecord = mLruProcesses.get(i); // IndexOutOfBoundsException
+                // AOSP ProcessList.updateLruProcessLocked() 是 mLruProcesses.add(0, app)：
+                // index 0 = 最近活跃，index 越大越老。原实现从 size-1 倒着扫到 11，
+                // 恰好跳过最活跃的 11 个进程（后台下载的前台服务都在里面），宽松前台因此失效。
+                for (int i = 0; i < lruSize; i++) {
+                    var processRecord = mLruProcesses.get(i);
                     if (processRecord == null) continue;
 
                     final int uid = config.getProcessRecordUid(processRecord);// processRecord
