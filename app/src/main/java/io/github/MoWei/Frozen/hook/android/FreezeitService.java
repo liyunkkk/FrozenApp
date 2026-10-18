@@ -57,7 +57,7 @@ public class FreezeitService {
     Object netStatsBinder;
     Method readNetworkStatsUidDetailMethod;
     final java.util.HashMap<Integer, long[]> netSnapshots = new java.util.HashMap<>();
-    volatile boolean netStatsUnavailable = false;
+    long lastNetStatsWarn = 0;
 
     LocalSocketServer serverThread = new LocalSocketServer();
 
@@ -332,21 +332,22 @@ public class FreezeitService {
         }
 
         void pollNetworkSpeed() {
-            if (netStatsUnavailable) return;
-
             if (netStatsBinder == null) {
                 try {
                     Class<?> sm = Class.forName("android.os.ServiceManager");
                     Method getService = sm.getDeclaredMethod("getService", String.class);
                     netStatsBinder = getService.invoke(null, "netstats");
-                } catch (Throwable e) {
-                    netStatsUnavailable = true;
-                    log(NET_TAG, "取 netstats 服务失败: " + e);
-                    return;
+                } catch (Throwable ignored) {
+                    // ServiceManager 隐藏 API 早期不可用，继续等
                 }
                 if (netStatsBinder == null) {
-                    netStatsUnavailable = true;
-                    log(NET_TAG, "netstats 服务不存在");
+                    // netstats 在 systemReady 之后才注册，FreezeitService 构造时还拿不到是正常的。
+                    // 绝不能像上一版那样置 netStatsUnavailable=true 永久放弃。
+                    final long nowMs = System.currentTimeMillis();
+                    if (nowMs - lastNetStatsWarn > 30000) {
+                        lastNetStatsWarn = nowMs;
+                        log(NET_TAG, "netstats 尚未就绪，继续等待");
+                    }
                     return;
                 }
                 log(NET_TAG, "netstats 已连接");
@@ -359,8 +360,11 @@ public class FreezeitService {
                                     int.class, String[].class, int.class);
                     readNetworkStatsUidDetailMethod.setAccessible(true);
                 } catch (Throwable e) {
-                    netStatsUnavailable = true;
-                    log(NET_TAG, "找不到 readNetworkStatsUidDetail: " + e);
+                    final long nowMs = System.currentTimeMillis();
+                    if (nowMs - lastNetStatsWarn > 30000) {
+                        lastNetStatsWarn = nowMs;
+                        log(NET_TAG, "找不到 readNetworkStatsUidDetail: " + e);
+                    }
                     return;
                 }
             }
